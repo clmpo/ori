@@ -36,9 +36,8 @@ template <class _Key, class _Val>
 class DAGNode
 {
 public:
-    DAGNode()
-    {
-    }
+    DAGNode() = default;
+    
     DAGNode(_Key k, _Val v)
 	: k(k), v(v)
     {
