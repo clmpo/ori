@@ -57,7 +57,7 @@ ObjectInfo::toString() const
     strwstream ss;
 
     const char *type_str = getStrForType(type);
-    if (type_str == NULL) {
+    if (type_str == nullptr) {
         PANIC();
         return "";
     }
@@ -160,7 +160,7 @@ void ObjectInfo::print(ostream &outStream) const {
 }
 
 const char *ObjectInfo::getStrForType(Type type) {
-    const char *type_str = NULL;
+    const char *type_str = nullptr;
     switch (type) {
         case Commit:    type_str = "CMMT"; break;
         case Tree:      type_str = "TREE"; break;
@@ -170,7 +170,7 @@ const char *ObjectInfo::getStrForType(Type type) {
         default:
             printf("Unknown object type!\n");
             PANIC();
-            return NULL;
+            return nullptr;
     }
     return type_str;
 }
