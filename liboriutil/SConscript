@@ -25,7 +25,7 @@ src = [
 if os.name == 'posix':
     src += ['mutex_posix.cc', 'rwlock_posix.cc', 'thread_posix.cc']
 else:
-    print "Error unsupported operating system!"
+    print ("Error unsupported operating system!")
 
 if env["WITH_MDNS"]:
     src.append("zeroconf.cc")
@@ -38,8 +38,9 @@ if env["BUILD_BINARIES"]:
     libs = ["crypto", "stdc++"]
     if sys.platform != "darwin":
         libs += ['rt']
-    if sys.platform == "linux2":
+    if sys.platform == "linux2" or sys.platform == "linux":
         libs += ['uuid', 'resolv']
+    print("platform:", sys.platform)
     env_testori.Append(LIBS = libs)
     env_testori.Program("test_oriutil", "test_oriutil.cc")
 

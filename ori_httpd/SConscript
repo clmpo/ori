@@ -20,7 +20,7 @@ else:
     if env["WITH_MDNS"]:
         libs += ['dns_sd']
 
-if sys.platform == "linux2":
+if sys.platform == "linux2" or sys.platform == "linux":
     libs += ['uuid', 'resolv']
 
 env.Append(LIBPATH = [ "#build/libori", "#build/liboriutil", "$LIBPATH" ],
