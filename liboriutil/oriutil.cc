@@ -63,12 +63,10 @@ using namespace std;
 bool
 Util_IsValidName(const string &path)
 {
-    string::const_iterator it;
-
-    if (path.size() == 0)
+    if (path.empty())
         return false;
 
-    for (const char &it : path)
+    for (auto it : path)
     {
         if (it >= 'a' && it <= 'z')
             continue;
@@ -112,9 +110,9 @@ Util_GetFullname()
     struct passwd *pw = getpwuid(getuid());
 
     // XXX: Error handling
-    ASSERT(pw != NULL);
+    ASSERT(pw != nullptr);
 
-    if (pw->pw_gecos != NULL)
+    if (pw->pw_gecos != nullptr)
         return string(pw->pw_gecos);
     else
         return "";
@@ -126,7 +124,7 @@ Util_GetHome()
     char *path;
 
     path = getenv("HOME");
-    if (path == NULL)
+    if (path == nullptr)
         return "";
 
     return path;
