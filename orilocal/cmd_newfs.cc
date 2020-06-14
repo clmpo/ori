@@ -57,9 +57,7 @@ cmd_newfs(int argc, char * const argv[])
 {
     int ch;
     int status;
-    bool autosync = false;
-    string fsName;
-    string rootPath;
+    bool autosync = false;    
 
     struct option longopts[] = {
         { "autosync",   no_argument,    NULL,   'a' },
@@ -88,13 +86,13 @@ cmd_newfs(int argc, char * const argv[])
         return 1;
     }
     
-    fsName = argv[0];
+    const std::string fsName = argv[0];
     if (!Util_IsValidName(fsName)) {
         printf("Name contains invalid charecters!\n");
         return 1;
     }
 
-    rootPath = RepoStore_GetRepoPath(fsName);
+    const std::string rootPath = RepoStore_GetRepoPath(fsName);
     if (OriFile_Exists(rootPath)) {
         printf("File system already exists!\n");
         return 1;
