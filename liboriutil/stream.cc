@@ -108,7 +108,7 @@ bool bytestream::readExact(uint8_t *buf, size_t n)
 {
     size_t total = 0;
     while (total < n) {
-        size_t readBytes = read(buf+total, n-total);
+        const size_t readBytes = read(buf+total, n-total);
         if (error()) return false;
         if (readBytes == 0) {
             throw std::ios_base::failure("End of stream");
@@ -131,7 +131,7 @@ std::string bytestream::readAll() {
                 return "";
             }
 
-            size_t oldSize = rval.size();
+            const size_t oldSize = rval.size();
             rval.resize(oldSize + n);
             memcpy(&rval[oldSize], buf, n);
         }
@@ -497,8 +497,8 @@ diskstream::diskstream(const std::string &filename)
         return;
     }
 
-    size_t length = lseek(fd, 0, SEEK_END);
-    source.reset(new fdstream(fd, 0, length));
+    const size_t length = lseek(fd, 0, SEEK_END);
+    source = std::make_unique<fdstream>(fd, 0, length);
 }
 
 diskstream::~diskstream() {

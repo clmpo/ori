@@ -26,7 +26,7 @@ class OrisyncClient
 {
 public:
     OrisyncClient();
-    OrisyncClient(const std::string &remotePath);
+    explicit OrisyncClient(const std::string &remotePath);
     ~OrisyncClient();
 
     int connect();

@@ -40,7 +40,7 @@ class basestream
 public:
     basestream() : last_errnum(0) {}
 
-    virtual const char *error() { return last_error.size() > 0 ? last_error.c_str() : NULL; }
+    virtual const char *error() { return !last_error.empty() ? last_error.c_str() : nullptr; }
     virtual int errnum() { return last_errnum; }
 
 protected:
@@ -54,7 +54,7 @@ protected:
 class bytestream : public basestream
 {
 public:
-    typedef std::auto_ptr<bytestream> ap;
+    using ap = std::unique_ptr<bytestream>;
 
     bytestream() : typedStream(false) {}
     virtual ~bytestream() {};
@@ -103,9 +103,9 @@ class strstream : public bytestream
 {
 public:
     strstream(const std::string &, size_t start=0);
-    bool ended();
-    size_t read(uint8_t *, size_t);
-    size_t sizeHint() const;
+    virtual bool ended() override;
+    virtual size_t read(uint8_t *, size_t) override;
+    virtual size_t sizeHint() const override;
 private:
     std::string buf;
     size_t off;
@@ -116,9 +116,9 @@ class fdstream : public bytestream
 {
 public:
     fdstream(int fd, off_t offset, size_t length=(size_t)-1);
-    bool ended();
-    size_t read(uint8_t *, size_t);
-    size_t sizeHint() const;
+    bool ended() override;
+    size_t read(uint8_t *, size_t) override;
+    size_t sizeHint() const override;
 
 private:
     int fd;
@@ -129,11 +129,11 @@ private:
 class diskstream : public bytestream
 {
 public:
-    diskstream(const std::string &filename);
-    ~diskstream();
-    bool ended();
-    size_t read(uint8_t *, size_t);
-    size_t sizeHint() const;
+    explicit diskstream(const std::string &filename);
+    ~diskstream() override;
+    bool ended() override;
+    size_t read(uint8_t *, size_t) override;
+    size_t sizeHint() const override;
 
 private:
     int fd;
@@ -152,9 +152,9 @@ public:
     /// Takes ownership of source. size_hint is total number of bytes output (from read) 
     zipstream(bytestream *source, bool compress = false, size_t size_hint = 0);
     ~zipstream();
-    bool ended();
-    size_t read(uint8_t *, size_t);
-    size_t sizeHint() const;
+    bool ended() override;
+    size_t read(uint8_t *, size_t) override;
+    size_t sizeHint() const override;
     size_t inputConsumed() const;
 
 private:
@@ -204,7 +204,7 @@ private:
 class bytewstream : public basestream
 {
 public:
-    typedef std::auto_ptr<bytewstream> ap;
+    using ap = std::unique_ptr<bytewstream>;
 
     bytewstream() : typedStream(false) {}
     virtual ~bytewstream() {}

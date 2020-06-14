@@ -44,7 +44,7 @@ lookupcmd(const char *cmd)
 {
     int i;
 
-    for (i = 0; commands[i].name != NULL; i++)
+    for (i = 0; commands[i].name != nullptr; i++)
     {
         if (strcmp(commands[i].name, cmd) == 0)
             return i;
@@ -60,7 +60,7 @@ cmd_help(int argc, const char *argv)
 
     if (argc >= 2) {
         i = lookupcmd(argv);
-        if (i != -1 && commands[i].usage != NULL) {
+        if (i != -1 && commands[i].usage != nullptr) {
             commands[i].usage();
             return 0;
         }
@@ -75,13 +75,13 @@ cmd_help(int argc, const char *argv)
     printf("OriSync (%s) - Command Line Interface\n\n",
             ORI_VERSION_STR);
     printf("Available commands:\n");
-    for (i = 0; commands[i].name != NULL; i++)
+    for (i = 0; commands[i].name != nullptr; i++)
     {
 #ifndef DEBUG
         if (commands[i].flags & CMD_DEBUG)
             continue;
 #endif /* DEBUG */
-        if (commands[i].desc != NULL)
+        if (commands[i].desc != nullptr)
             printf("%-15s %s\n", commands[i].name, commands[i].desc);
     }
 
@@ -94,7 +94,7 @@ cmd_help(int argc, const char *argv)
 int
 cmd_foreground(int argc, const char *argv)
 {
-    string oriHome = Util_GetHome() + "/.ori";
+    const std::string oriHome = Util_GetHome() + "/.ori";
 
     if (!OriFile_Exists(oriHome))
         OriFile_MkDir(oriHome);
@@ -144,7 +144,7 @@ int OrisyncClient::connect()
         return -1;
 
     fd = sock;
-    streamToChild.reset(new fdwstream(fd));
+    streamToChild = std::make_unique<fdwstream>(fd);
 
     // Sync by waiting for message from server
     if (!respIsOK()) {
