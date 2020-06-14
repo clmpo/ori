@@ -136,7 +136,7 @@ Util_GetOSType()
     char *ostype;
 
     ostype = getenv("OSTYPE");
-    if (ostype == NULL)
+    if (ostype == nullptr)
         return "unknown";
 
     return ostype;
@@ -148,7 +148,7 @@ Util_GetMachType()
     char *machtype;
 
     machtype = getenv("MACHTYPE");
-    if (machtype == NULL)
+    if (machtype == nullptr)
         return "unknown";
 
     return machtype;
