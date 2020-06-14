@@ -59,7 +59,7 @@ using namespace std;
  * Check if a file exists.
  */
 bool
-OriFile_Exists(const string &path)
+OriFile_Exists(const std::string &path)
 {
     struct stat sb;
 
@@ -70,7 +70,7 @@ OriFile_Exists(const string &path)
 }
 
 int
-OriFile_MkDir(const string &path)
+OriFile_MkDir(const std::string &path)
 {
     if (mkdir(path.c_str(), 0755) < 0) {
         perror("mkdir failed");
@@ -81,7 +81,7 @@ OriFile_MkDir(const string &path)
 }
 
 int
-OriFile_RmDir(const string &path)
+OriFile_RmDir(const std::string &path)
 {
     if (rmdir(path.c_str()) < 0) {
         return -errno;
@@ -94,7 +94,7 @@ OriFile_RmDir(const string &path)
  * Check if a file is a directory.
  */
 bool
-OriFile_IsDirectory(const string &path)
+OriFile_IsDirectory(const std::string &path)
 {
     struct stat sb;
 
