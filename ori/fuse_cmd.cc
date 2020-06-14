@@ -35,14 +35,14 @@ bool OF_HasFuse()
     return OF_ControlPath() != "";
 }
 
-string OF_RootPath()
+std::string OF_RootPath()
 {
     char *cwdbuf = getcwd(NULL, 0);
-    string path = cwdbuf;
+    std::string path = cwdbuf;
     free(cwdbuf);
 
     while (path.size() > 0) {
-        string control_path = path + "/" + ORI_CONTROL_FILENAME;
+        std::string control_path = path + "/" + ORI_CONTROL_FILENAME;
         if (OriFile_Exists(control_path)) {
             return path;
         }
@@ -52,14 +52,14 @@ string OF_RootPath()
     return "";
 }
 
-string OF_ControlPath()
+std::string OF_ControlPath()
 {
     char *cwdbuf = getcwd(NULL, 0);
-    string path = cwdbuf;
+    std::string path = cwdbuf;
     free(cwdbuf);
 
     while (path.size() > 0) {
-        string control_path = path + "/" + ORI_CONTROL_FILENAME;
+        const std::string control_path = path + "/" + ORI_CONTROL_FILENAME;
         if (OriFile_Exists(control_path)) {
             return control_path;
         }
@@ -69,29 +69,26 @@ string OF_ControlPath()
     return "";
 }
 
-string OF_RepoPath()
+std::string OF_RepoPath()
 {
-    int status;
-    string controlPath = OF_ControlPath();
-    int fd;
-    struct stat sb;
-    char buf[1024];
-
-    if (controlPath.size() == 0)
+    const std::string controlPath = OF_ControlPath();
+    if (controlPath.empty())
         return "";
 
-    fd = open(controlPath.c_str(), O_RDONLY);
+    const int fd = open(controlPath.c_str(), O_RDONLY);
     if (fd < 0) {
         perror("OF_RepoPath: open");
         return "";
     }
 
-    status = fstat(fd, &sb);
+    struct stat sb;
+    int status = fstat(fd, &sb);
     if (status < 0) {
         perror("OF_RepoPath: fstat");
         return "";
     }
 
+    char buf[1024];
     status = read(fd, buf, sb.st_size);
     if (status < 0) {
         perror("OF_RepoPath: read");
@@ -100,6 +97,6 @@ string OF_RepoPath()
 
     buf[status] = '\0';
 
-    return string(buf);
+    return std::string(buf);
 }
 

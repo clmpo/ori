@@ -129,13 +129,12 @@ OriFile_GetSize(const std::string &path)
  * Return the full path given a relative path.
  * XXX: According to FreeBSD man pages this may be broken on Solaris.
  */
-string
-OriFile_RealPath(const string &path)
+std::string
+OriFile_RealPath(const std::string &path)
 {
-    char *tmp;
-    string rval = "";
+    std::string rval = "";
 
-    tmp = realpath(path.c_str(), NULL);
+    char* tmp = realpath(path.c_str(), nullptr);
     if (tmp) {
         rval = tmp;
         free(tmp);
@@ -196,15 +195,12 @@ OriFile_WriteFile(const std::string &blob, const string &path)
 bool
 OriFile_WriteFile(const char *blob, size_t len, const string &path)
 {
-    FILE *f;
-    size_t bytesWritten;
-
-    f = fopen(path.c_str(), "w+");
-    if (f == NULL) {
+    FILE* f = fopen(path.c_str(), "w+");
+    if (!f) {
         return false;
     }
 
-    bytesWritten = fwrite(blob, len, 1, f);
+    const size_t bytesWritten = fwrite(blob, len, 1, f);
     fclose(f);
 
     return (bytesWritten == 1);
@@ -225,15 +221,12 @@ OriFile_Append(const std::string &blob, const string &path)
 bool
 OriFile_Append(const char *blob, size_t len, const string &path)
 {
-    FILE *f;
-    size_t bytesWritten;
-
-    f = fopen(path.c_str(), "a+");
-    if (f == NULL) {
+    FILE* f = fopen(path.c_str(), "a+");
+    if (!f) {
         return false;
     }
 
-    bytesWritten = fwrite(blob, len, 1, f);
+    const size_t bytesWritten = fwrite(blob, len, 1, f);
     fclose(f);
 
     return (bytesWritten == 1);
@@ -245,17 +238,16 @@ OriFile_Append(const char *blob, size_t len, const string &path)
 int
 OriFile_Copy(const string &origPath, const string &newPath)
 {
-    int srcFd, dstFd;
     char buf[COPYFILE_BUFSZ];
     struct stat sb;
     int64_t bytesLeft;
     int64_t bytesRead, bytesWritten;
 
-    srcFd = open(origPath.c_str(), O_RDONLY);
+    const int srcFd = open(origPath.c_str(), O_RDONLY);
     if (srcFd < 0)
         return -errno;
 
-    dstFd = open(newPath.c_str(), O_WRONLY | O_CREAT,
+    const int dstFd = open(newPath.c_str(), O_WRONLY | O_CREAT,
                  S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
     if (dstFd < 0) {
         close(srcFd);
@@ -356,7 +348,7 @@ OriFile_Rename(const std::string &from, const std::string &to)
 std::string
 OriFile_Basename(const std::string &path)
 {
-    size_t ix = path.rfind('/');
+    const size_t ix = path.rfind('/');
     if (ix == std::string::npos) {
         return path;
     }
@@ -366,7 +358,7 @@ OriFile_Basename(const std::string &path)
 std::string
 OriFile_Dirname(const std::string &path)
 {
-    size_t ix = path.rfind('/');
+    const size_t ix = path.rfind('/');
     if (ix == std::string::npos) {
         return path;
     }
