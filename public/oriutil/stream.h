@@ -243,10 +243,10 @@ protected:
 class strwstream : public bytewstream
 {
 public:
-    strwstream();
+    strwstream() = default;
     strwstream(const std::string &);
     strwstream(size_t reserved);
-    ssize_t write(const void *, size_t);
+    ssize_t write(const void *, size_t) override;
 
     const std::string &str() const;
 private:
@@ -256,8 +256,8 @@ private:
 class fdwstream : public bytewstream
 {
 public:
-    fdwstream(int fd);
-    ssize_t write(const void *, size_t);
+    explicit fdwstream(int fd);
+    ssize_t write(const void *, size_t) override;
 private:
     int fd;
 };
