@@ -403,7 +403,7 @@ Object::sp LocalRepo::getObject(const ObjectHash &objId)
             }
 
             if (cacheRemoteObjects) {
-                auto_ptr<bytestream> bs(ro->getPayloadStream());
+                std::unique_ptr<bytestream> bs(ro->getPayloadStream());
                 const std::string buf = bs->readAll();
                 addBlob(ro->getInfo().type, buf);
 
