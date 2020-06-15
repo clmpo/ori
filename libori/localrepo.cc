@@ -197,7 +197,7 @@ LocalRepoLock::~LocalRepoLock()
 
 LocalRepo::LocalRepo(const string &root)
     : opened(false),
-      remoteRepo(NULL)
+      remoteRepo(nullptr)
 {
     rootPath = (root == "") ? findRootPath() : root;
 }
@@ -352,7 +352,7 @@ LocalRepo::setRemote(Repo *r)
 {
     Monitor lock(remoteLock);
 
-    ASSERT(remoteRepo == NULL);
+    ASSERT(remoteRepo == nullptr);
     remoteRepo = r;
     cacheRemoteObjects = true;
 }
@@ -362,7 +362,7 @@ LocalRepo::clearRemote()
 {
     Monitor lock(remoteLock);
 
-    remoteRepo = NULL;
+    remoteRepo = nullptr;
 }
 
 void
@@ -378,7 +378,7 @@ LocalRepo::hasRemote()
 {
     Monitor lock(remoteLock);
 
-    return (remoteRepo != NULL);
+    return (remoteRepo != nullptr);
 }
 
 /*
@@ -393,7 +393,7 @@ Object::sp LocalRepo::getObject(const ObjectHash &objId)
         LOG("Object not found: %s", objId.hex().c_str());
         Monitor lock(remoteLock);
 
-        if (remoteRepo != NULL) {
+        if (remoteRepo != nullptr) {
             LOG("Instaclone getting object %s", objId.hex().c_str());
             Object::sp ro = remoteRepo->getObject(objId);
 

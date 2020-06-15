@@ -64,7 +64,7 @@ RKChunker<target, min, max>::~RKChunker()
 template<int target, int min, int max>
 void RKChunker<target, min, max>::chunk(ChunkerCB *cb)
 {
-    uint8_t *in = NULL;
+    uint8_t *in = nullptr;
     uint64_t len = 0;
     uint64_t hash = 0;
     uint64_t off = 0;

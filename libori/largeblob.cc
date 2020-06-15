@@ -97,7 +97,7 @@ public:
     {
         lb = l;
         lbOff = 0;
-        buf = NULL;
+        buf = nullptr;
     }
     ~FileChunkerCB()
     {
@@ -112,7 +112,7 @@ public:
 
         bufLen = 8 * 1024 * 1024;
         buf = new uint8_t[bufLen];
-        if (buf == NULL)
+        if (buf == nullptr)
             return -ENOMEM;
 
         srcFd = ::open(path.c_str(), O_RDONLY);
@@ -142,7 +142,7 @@ public:
     }
     virtual int load(uint8_t **b, uint64_t *l, uint64_t *o)
     {
-        if (*b == NULL)
+        if (*b == nullptr)
             *b = buf;
 
         if (fileOff == fileLen)

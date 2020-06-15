@@ -60,9 +60,9 @@ OriFileInfo::loadAttr(const AttrMap &attrs)
 {
     struct passwd *pw = getpwnam(attrs.getAsStr(ATTR_USERNAME).c_str());
 
-    if (pw == NULL) {
+    if (pw == nullptr) {
       pw = getpwuid(getuid());
-      NOT_IMPLEMENTED(pw != NULL);
+      NOT_IMPLEMENTED(pw != nullptr);
     }
 
     if (statInfo.st_mode != S_IFDIR) {
@@ -93,17 +93,17 @@ OriFileInfo::loadAttr(const AttrMap &attrs)
 void
 OriFileInfo::storeAttr(AttrMap *attrs) const
 {
-    ASSERT(attrs != NULL);
+    ASSERT(attrs != nullptr);
 
     struct passwd *pw = getpwuid(statInfo.st_uid);
     struct group *grp = getgrgid(statInfo.st_gid);
 
-    if (pw != NULL)
+    if (pw != nullptr)
         attrs->setAsStr(ATTR_USERNAME, pw->pw_name);
     else
         attrs->setAsStr(ATTR_USERNAME, "nobody");
 
-    if (grp != NULL)
+    if (grp != nullptr)
         attrs->setAsStr(ATTR_GROUPNAME, grp->gr_name);
     else
         attrs->setAsStr(ATTR_GROUPNAME, "nogroup");
@@ -168,7 +168,7 @@ OriPriv::OriPriv(const std::string &repoPath,
     dirInfo->statInfo.st_size = 512;
     dirInfo->id = generateId();
     if (head.isEmpty()) {
-        time_t now = time(NULL);
+        time_t now = time(nullptr);
         dirInfo->statInfo.st_mtime = now;
         dirInfo->statInfo.st_ctime = now;
         dirInfo->type = FILETYPE_DIRTY;
@@ -363,7 +363,7 @@ OriFileInfo *
 OriPriv::createInfo()
 {
     OriFileInfo *info = new OriFileInfo();
-    time_t now = time(NULL);
+    const time_t now = time(nullptr);
 
     // XXX: Switch to using fuse_context
     info->statInfo.st_uid = geteuid();

@@ -245,8 +245,8 @@ ori_rename(const char *from_path, const char *to_path)
     RWKey::sp lock = priv->nsLock.writeLock();
     try {
         OriFileInfo *info = priv->getFileInfo(from_path);
-        OriFileInfo *toFile = NULL;
-        OriDir *toFileDir = NULL;
+        OriFileInfo *toFile = nullptr;
+        OriDir *toFileDir = nullptr;
 
         try {
             toFile = priv->getFileInfo(to_path);
@@ -261,7 +261,7 @@ ori_rename(const char *from_path, const char *to_path)
             if (!toFileDir->isEmpty())
                 return -ENOTEMPTY;
         }
-        if (toFile != NULL && info->isDir() && !toFile->isDir()) {
+        if (toFile != nullptr && info->isDir() && !toFile->isDir()) {
             return -EISDIR;
         }
 

@@ -46,7 +46,7 @@ RepoControl::open()
     } catch (const SystemException& e) {
         if (udsRepo)
             delete udsRepo;
-        udsRepo = NULL;
+        udsRepo = nullptr;
         WARNING("%s", e.what());
     }
 
@@ -82,9 +82,9 @@ RepoControl::close()
         delete localRepo;
     }
 
-    udsClient = NULL;
-    udsRepo = NULL;
-    localRepo = NULL;
+    udsClient = nullptr;
+    udsRepo = nullptr;
+    localRepo = nullptr;
 }
 
 string
