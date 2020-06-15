@@ -106,210 +106,210 @@ static Cmd commands[] = {
         "addkey",
         "Add a trusted public key to the repository",
         cmd_addkey,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "branches",
         "List all available branches (EXPERIMENTAL)",
         cmd_branches,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "filelog",
         "Display a log of change to the specified file",
         cmd_filelog,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "findheads",
         "Find lost heads",
         cmd_findheads,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "gc",
         "Reclaim unused space",
         cmd_gc,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "help",
         "Show help for a given topic",
         cmd_help,
-        NULL,
+        nullptr,
         0,
     },
     {
         "listkeys",
         "Display a list of trusted public keys",
         cmd_listkeys,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "log",
         "Display a log of commits to the repository",
         cmd_log,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "purgesnapshot",
         "Purge snapshot",
         cmd_purgesnapshot,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "remote",
         "Remote connection management",
         cmd_remote,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "removekey",
         "Remove a public key from the repository",
         cmd_removekey,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "setkey",
         "Set the repository private key for signing commits",
         cmd_setkey,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "show",
         "Show repository information",
         cmd_show,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "snapshots",
         "List all snapshots available in the repository",
         cmd_snapshots,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "tip",
         "Print the latest commit on this branch",
         cmd_tip,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "verify",
         "Verify the repository",
         cmd_verify,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "catobj",
         "Print an object from the repository",
         cmd_catobj,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "dumpindex",
         "Dump the repository index",
         cmd_dumpindex,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "dumpmeta",
         "Print the repository metadata",
         cmd_dumpmeta,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "dumpobj",
         "Print the structured representation of an object",
         cmd_dumpobj,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "dumppackfile",
         "Dump the contents of a packfile",
         cmd_dumppackfile,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "dumprefs",
         "Print the repository reference counts",
         cmd_dumprefs,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "listobj",
         "List objects",
         cmd_listobj,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "rebuildindex",
         "Rebuild index",
         cmd_rebuildindex,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "rebuildrefs",
         "Rebuild references",
         cmd_rebuildrefs,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "refcount",
         "Print the reference count for all objects",
         cmd_refcount,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "stats",
         "Print repository statistics",
         cmd_stats,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "purgeobj",
         "Purge object",
         cmd_purgeobj,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "stripmetadata",
         "Strip all object metadata including backreferences",
         cmd_stripmetadata,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "treediff",
         "Compare two commits",
         cmd_treediff,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     /* Debugging */
@@ -317,42 +317,42 @@ static Cmd commands[] = {
         "httpclient",
         "Connect to a server via HTTP",
         cmd_httpclient,
-        NULL,
+        nullptr,
         0,
     },
     {
         "sshclient",
         "Connect to a server via SSH",
         cmd_sshclient,
-        NULL,
+        nullptr,
         0,
     },
     {
         "udsclient",
         "Connect to a server via UDS",
         cmd_udsclient,
-        NULL,
+        nullptr,
         0,
     },
     {
         "udsserver",
         "UDS test server",
         cmd_udsserver,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "interactive",
         "Interactive console",
         cmd_interactive,
-        NULL,
+        nullptr,
         CMD_NEED_REPO,
     },
     {
         "version",
         "Show version information",
         cmd_version,
-        NULL,
+        nullptr,
         0,
     },
 #if !defined(WITHOUT_MDNS)
@@ -360,11 +360,11 @@ static Cmd commands[] = {
         "mdnsserver",
         "Run the mDNS server",
         cmd_mdnsserver,
-        NULL,
+        nullptr,
         0,
     },
 #endif
-    { NULL, NULL, NULL, NULL }
+    { nullptr, nullptr, nullptr, nullptr }
 };
 
 static int
@@ -372,7 +372,7 @@ lookupcmd(const char *cmd)
 {
     int i;
 
-    for (i = 0; commands[i].name != NULL; i++)
+    for (i = 0; commands[i].name != nullptr; i++)
     {
         if (strcmp(commands[i].name, cmd) == 0)
             return i;
@@ -388,7 +388,7 @@ cmd_help(int argc, char * const argv[])
 
     if (argc >= 2) {
         i = lookupcmd(argv[1]);
-        if (i != -1 && commands[i].usage != NULL) {
+        if (i != -1 && commands[i].usage != nullptr) {
             commands[i].usage();
             return 0;
         }
@@ -403,9 +403,9 @@ cmd_help(int argc, char * const argv[])
     printf("Ori Distributed Personal File System (%s) - Debug Command Line Interface\n\n",
             ORI_VERSION_STR);
     printf("Available commands:\n");
-    for (i = 0; commands[i].name != NULL; i++)
+    for (i = 0; commands[i].name != nullptr; i++)
     {
-        if (commands[i].desc != NULL)
+        if (commands[i].desc != nullptr)
             printf("%-15s %s\n", commands[i].name, commands[i].desc);
     }
 
@@ -434,7 +434,7 @@ cmd_version(int argc, char * const argv[])
     return 0;
 }
 
-static EditLine *el = NULL;
+static EditLine *el = nullptr;
 static History *hist;
 static HistEvent ev;
 static char prompt[512];
@@ -462,7 +462,7 @@ cmd_interactive(int argc, char * const argv[])
     while (1) {
         int num;
         const char *line = el_gets(el, &num);
-        if (line == NULL) {
+        if (line == nullptr) {
             continue;
         }
 
@@ -471,7 +471,7 @@ cmd_interactive(int argc, char * const argv[])
         // Tokenize
         int argc = 32;
         const char **argv;
-        Tokenizer *tok = tok_init(NULL);
+        Tokenizer *tok = tok_init(nullptr);
         int status = tok_str(tok, line, &argc, &argv);
         if (status != 0) {
             printf("Error parsing line!\n");
@@ -505,13 +505,13 @@ main(int argc, char *argv[])
     int idx;
 
     if (argc == 1) {
-        return cmd_help(0, NULL);
+        return cmd_help(0, nullptr);
     }
 
     idx = lookupcmd(argv[1]);
     if (idx == -1) {
         printf("Unknown command '%s'\n", argv[1]);
-        cmd_help(0, NULL);
+        cmd_help(0, nullptr);
         return 1;
     }
 

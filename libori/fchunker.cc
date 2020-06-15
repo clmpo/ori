@@ -46,7 +46,7 @@ public:
     ~TestCB()
     {
 	delete buf;
-	buf = NULL;
+	buf = nullptr;
     }
     void fill()
     {

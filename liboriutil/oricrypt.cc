@@ -177,7 +177,7 @@ OriCrypt_Encrypt(const string &plaintext, const string &key)
     buf = new unsigned char[clen];
 
     EVP_CIPHER_CTX_init(ctx);
-    EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, keyData, ivData);
+    EVP_EncryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, keyData, ivData);
     EVP_EncryptUpdate(ctx, buf, &clen,
                       (const unsigned char *)plaintext.data(),
                       plaintext.size());
@@ -226,7 +226,7 @@ OriCrypt_Decrypt(const string &ciphertext, const string &key)
     buf = new unsigned char[plen];
 
     EVP_CIPHER_CTX_init(ctx);
-    EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), NULL, keyData, ivData);
+    EVP_DecryptInit_ex(ctx, EVP_aes_256_cbc(), nullptr, keyData, ivData);
     EVP_DecryptUpdate(ctx, buf, &plen,
                       (const unsigned char *)ciphertext.data() + PKCS5_SALT_LEN,
                       ciphertext.size() - PKCS5_SALT_LEN);

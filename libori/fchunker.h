@@ -45,7 +45,7 @@ FChunker<chunk_size>::~FChunker()
 template<int chunk_size>
 void FChunker<chunk_size>::chunk(ChunkerCB *cb)
 {
-    uint8_t *in = NULL;
+    uint8_t *in = nullptr;
     uint64_t len = 0;
     uint64_t off = 0;
     uint64_t start = 0;

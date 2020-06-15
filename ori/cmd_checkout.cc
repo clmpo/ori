@@ -60,11 +60,11 @@ cmd_checkout(int argc, char * const argv[])
     ObjectHash tip = repository.getHead();
 
     struct option longopts[] = {
-        { "force",      no_argument,    NULL,   'f' },
-        { NULL,         0,              NULL,   0   }
+        { "force",      no_argument,    nullptr,   'f' },
+        { nullptr,         0,           nullptr,   0   }
     };
 
-    while ((ch = getopt_long(argc, argv, "f", longopts, NULL)) != -1) {
+    while ((ch = getopt_long(argc, argv, "f", longopts, nullptr)) != -1) {
         switch (ch) {
             case 'f':
                 force = true;

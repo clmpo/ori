@@ -49,7 +49,7 @@ OriNet_ResolveHost(const string &hostname) {
     //hints.ai_flags = AI_ADDRCONFIG | AI_V4MAPPED;
 
     int status = getaddrinfo(hostname.c_str(), "80", &hints, &result);
-    if (status < 0 || result == NULL) {
+    if (status < 0 || result == nullptr) {
         perror("getaddrinfo");
         return "";
     }
@@ -74,12 +74,12 @@ OriNet_GetAddrs()
         throw SystemException();
     }
 
-    for (ifa = ifaddr; ifa != NULL; ifa = ifa->ifa_next) {
+    for (ifa = ifaddr; ifa != nullptr; ifa = ifa->ifa_next) {
         int family;
         int status;
         char hostAddr[NI_MAXHOST];
 
-        if (ifa->ifa_addr == NULL)
+        if (ifa->ifa_addr == nullptr)
             continue;
 
         family = ifa->ifa_addr->sa_family;
@@ -91,7 +91,7 @@ OriNet_GetAddrs()
             continue;
 
         status = getnameinfo(ifa->ifa_addr, sizeof(struct sockaddr_in),
-                             hostAddr, NI_MAXHOST, NULL, 0, NI_NUMERICHOST);
+                             hostAddr, NI_MAXHOST, nullptr, 0, NI_NUMERICHOST);
         if (status != 0) {
             freeifaddrs(ifaddr);
             throw SystemException(EINVAL);

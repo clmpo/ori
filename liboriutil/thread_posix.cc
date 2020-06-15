@@ -45,7 +45,7 @@ Thread::Thread()
     cstate = Running;
     tname = "";
     tid = pthread_self(); // How do i fix this for the current thread
-    attr = NULL;
+    attr = nullptr;
 }
 
 Thread::Thread(const string &name)
@@ -54,7 +54,7 @@ Thread::Thread(const string &name)
     cstate = Running;
     tname = name;
     tid = pthread_self();
-    attr = NULL;
+    attr = nullptr;
 }
 
 Thread::~Thread()
@@ -119,7 +119,7 @@ void Thread::start()
 
 bool Thread::wait(unsigned long time)
 {
-    if (pthread_join(tid, NULL))
+    if (pthread_join(tid, nullptr))
       return true;
     return false;
 }

@@ -1148,7 +1148,7 @@ OriPriv::checkout(ObjectHash hash, bool force)
             case OriFileState::Deleted:
             {
                 OriFileInfo *info = getFileInfo(filePath);
-                if (info != NULL) {
+                if (info != nullptr) {
                     if (info->isDir()) {
                         rmDir(filePath);
                     } else {

@@ -160,7 +160,7 @@ class OriPriv
 public:
     OriPriv(const std::string &repoPath,
             const std::string &origin = "",
-            Repo *remoteRepo = NULL);
+            Repo *remoteRepo = nullptr);
     ~OriPriv();
     // Repository Operations
     void reset();

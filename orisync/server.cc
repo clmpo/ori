@@ -218,7 +218,7 @@ public:
         RWKey::sp key2 = rhost->hostLock.writeLock();
         rhost->update(kv);
         rhost->setPreferredIp(srcIp);
-        rhost->setTime(time(NULL));
+        rhost->setTime(time(nullptr));
         rhost->setStatus("OK");
         rhost->setDown(false);
         key2.reset();
@@ -247,7 +247,7 @@ public:
             //kv.dump();
 
             // Prevent replay attacks from leaking information
-            uint64_t now = time(NULL);
+            uint64_t now = time(nullptr);
             uint64_t ts = kv.getU64("time");
             string hostId = kv.getStr("hostId");
             if (ts > now + ORISYNC_ADVSKEW || ts < now - ORISYNC_ADVSKEW) {
@@ -413,7 +413,7 @@ public:
         if (repo.isMounted()) {
             if (!info.hasRemote()) {
                 // Take snapshot with longer interval
-                if (info.getSStime() > time(NULL) - ORISYNC_SLOWSSINTERVAL)
+                if (info.getSStime() > time(nullptr) - ORISYNC_SLOWSSINTERVAL)
                     goto skipss;
 
             }
@@ -609,7 +609,7 @@ Httpd_getRoot(struct evhttp_request *req, void *arg)
     struct evbuffer *buf;
 
     buf = evbuffer_new();
-    if (buf == NULL) {
+    if (buf == nullptr) {
         evhttp_send_error(req, HTTP_INTERNAL, "Internal Error");
         return;
     }
@@ -710,7 +710,7 @@ public:
     {
     }
     void run() {
-        time_t lastGC = time(NULL);
+        time_t lastGC = time(nullptr);
         string down("Down. Last connected ");
         char timeStr[26];
 
@@ -719,7 +719,7 @@ public:
           // check if hosts are still alive
           RWKey::sp key = hostsLock.readLock();
           for (auto &it : hosts) {
-              if ((!it.second->isDown()) && (it.second->getTime() + HOST_TIMEOUT < time(NULL))) {
+              if ((!it.second->isDown()) && (it.second->getTime() + HOST_TIMEOUT < time(nullptr))) {
                   RWKey::sp hostLock = it.second->hostLock.writeLock();
                   it.second->setDown(true);
                   // Consider as host down
@@ -743,7 +743,7 @@ public:
           key.reset();
 
 
-          if (lastGC + ORISYNC_GCINTERVAL > time(NULL)) {
+          if (lastGC + ORISYNC_GCINTERVAL > time(nullptr)) {
             // time to do garbage collection
             //RWKey::sp key2 = infoLock.readLock();
             RWKey::sp key2 = myInfo.hostLock.readLock();
@@ -757,12 +757,12 @@ public:
                     continue;
                 }
                 RWKey::sp repoKey = myInfo.getRepoLock(repo.getUUID())->writeLock();
-                repo.gc(time(NULL) - ORISYNC_PURGETIME);
+                repo.gc(time(nullptr) - ORISYNC_PURGETIME);
                 repoKey.reset();
                 repo.close();
             }
             key2.reset();
-            lastGC = time(NULL);
+            lastGC = time(nullptr);
           }
         }
         DLOG("Watchdog exited!");
@@ -804,7 +804,7 @@ start_server()
     struct evhttp *httpd = evhttp_new(base);
     evhttp_bind_socket(httpd, "0.0.0.0", 8051);
 
-    evhttp_set_cb(httpd, "/", Httpd_getRoot, NULL);
+    evhttp_set_cb(httpd, "/", Httpd_getRoot, nullptr);
 
     // Event loop
     event_base_dispatch(base);

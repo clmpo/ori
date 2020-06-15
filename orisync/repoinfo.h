@@ -103,7 +103,7 @@ public:
         return (peers.find(p) != peers.end());
     }
     void setSStime() {
-        lastSnapShot = time(NULL);
+        lastSnapShot = time(nullptr);
     }
     time_t getSStime() {
         return lastSnapShot;

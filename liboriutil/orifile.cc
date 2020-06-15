@@ -158,8 +158,8 @@ OriFile_ReadFile(const string &path)
     size_t len;
 
     f = fopen(path.c_str(), "rb");
-    if (f == NULL) {
-        return NULL;
+    if (f == nullptr) {
+        return nullptr;
     }
 
     fseek(f, 0, SEEK_END);
@@ -174,7 +174,7 @@ OriFile_ReadFile(const string &path)
     // read and write strings easily.
     buf[len] = '\0';
 
-    if (flen != NULL)
+    if (flen != nullptr)
         *flen = len;
 
     return buf;*/

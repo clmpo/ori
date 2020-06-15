@@ -62,11 +62,11 @@ cmd_newfs(int argc, char * const argv[])
     string rootPath;
 
     struct option longopts[] = {
-        { "autosync",   no_argument,    NULL,   'a' },
-        { NULL,         0,              NULL,   0   }
+        { "autosync",   no_argument,    nullptr,   'a' },
+        { nullptr,         0,              nullptr,   0   }
     };
 
-    while ((ch = getopt_long(argc, argv, "a", longopts, NULL)) != -1) {
+    while ((ch = getopt_long(argc, argv, "a", longopts, nullptr)) != -1) {
         switch (ch) {
             case 'a':
                 autosync = true;

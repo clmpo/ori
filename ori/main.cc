@@ -112,28 +112,28 @@ static Cmd commands[] = {
         "addkey",
         "Add a trusted public key to the repository",
         cmd_addkey,
-        NULL,
+        nullptr,
         CMD_EXPERIMENTAL,
     },
     {
         "branch",
         "Set or print current branch",
         cmd_branch,
-        NULL,
+        nullptr,
         CMD_EXPERIMENTAL | CMD_NEED_FUSE,
     },
     {
         "branches",
         "List all available branches",
         cmd_branches,
-        NULL,
+        nullptr,
         CMD_EXPERIMENTAL | CMD_NEED_FUSE,
     },
     {
         "checkout",
         "Checkout a revision of the repository",
         cmd_checkout,
-        NULL,
+        nullptr,
         CMD_EXPERIMENTAL | CMD_NEED_FUSE,
     },
     {
@@ -147,28 +147,28 @@ static Cmd commands[] = {
         "diff",
         "Display a diff of the pending changes (NS)",
         cmd_diff,
-        NULL,
+        nullptr,
         CMD_DEBUG,
     },
     {
         "filelog",
         "Display a log of change to the specified file",
         cmd_filelog,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE,
     },
     {
         "findheads",
         "Find lost heads (NS)",
         cmd_findheads,
-        NULL,
+        nullptr,
         CMD_DEBUG,
     },
     {
         "gc",
         "Reclaim unused space (NS)",
         cmd_gc,
-        NULL,
+        nullptr,
         CMD_DEBUG,
     },
     {
@@ -182,7 +182,7 @@ static Cmd commands[] = {
         "help",
         "Show help for a given topic",
         cmd_help,
-        NULL,
+        nullptr,
         0,
     },
     {
@@ -196,21 +196,21 @@ static Cmd commands[] = {
         "listkeys",
         "Display a list of trusted public keys",
         cmd_listkeys,
-        NULL,
+        nullptr,
         CMD_EXPERIMENTAL,
     },
     {
         "log",
         "Display a log of commits to the repository",
         cmd_log,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE,
     },
     {
         "merge",
         "Merge two heads",
         cmd_merge,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE,
     },
     {
@@ -224,21 +224,21 @@ static Cmd commands[] = {
         "pull",
         "Pull changes from a repository",
         cmd_pull,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE,
     },
     {
         "purgesnapshot",
         "Purge snapshot (NS)",
         cmd_purgesnapshot,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE | CMD_DEBUG,
     },
     {
         "remote",
         "Remote connection management",
         cmd_remote,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE,
     },
     {
@@ -252,7 +252,7 @@ static Cmd commands[] = {
         "removekey",
         "Remove a public key from the repository",
         cmd_removekey,
-        NULL,
+        nullptr,
         CMD_EXPERIMENTAL,
     },
     {
@@ -266,14 +266,14 @@ static Cmd commands[] = {
         "setkey",
         "Set the repository private key for signing commits",
         cmd_setkey,
-        NULL,
+        nullptr,
         CMD_EXPERIMENTAL,
     },
     {
         "show",
         "Show repository information",
         cmd_show,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE,
     },
     {
@@ -287,36 +287,36 @@ static Cmd commands[] = {
         "snapshots",
         "List all snapshots available in the repository",
         cmd_snapshots,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE,
     },
     {
         "status",
         "Scan for changes since last commit",
         cmd_status,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE,
     },
     {
         "tip",
         "Print the latest commit on this branch",
         cmd_tip,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE,
     },
     {
         "varlink",
         "Get, set, list varlink variables",
         cmd_varlink,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE,
     },
     /* Internal (always hidden) */
     {
         "sshserver",
-        NULL, // "Run a simple stdin/out server, intended for SSH access",
+        nullptr, // "Run a simple stdin/out server, intended for SSH access",
         cmd_sshserver,
-        NULL,
+        nullptr,
         0,
     },
     /* Debugging */
@@ -324,17 +324,17 @@ static Cmd commands[] = {
         "fsck",
         "Check internal state of FUSE file system",
         cmd_fsck,
-        NULL,
+        nullptr,
         CMD_NEED_FUSE | CMD_DEBUG,
     },
     {
         "version",
         "Show version information",
         cmd_version,
-        NULL,
+        nullptr,
         CMD_DEBUG,
     },
-    { NULL, NULL, NULL, NULL }
+    { nullptr, nullptr, nullptr, nullptr }
 };
 
 static int
@@ -342,7 +342,7 @@ lookupcmd(const char *cmd)
 {
     int i;
 
-    for (i = 0; commands[i].name != NULL; i++)
+    for (i = 0; commands[i].name != nullptr; i++)
     {
         if (strcmp(commands[i].name, cmd) == 0)
             return i;
@@ -358,7 +358,7 @@ cmd_help(int argc, char * const argv[])
 
     if (argc >= 2) {
         i = lookupcmd(argv[1]);
-        if (i != -1 && commands[i].usage != NULL) {
+        if (i != -1 && commands[i].usage != nullptr) {
             commands[i].usage();
             return 0;
         }
@@ -373,7 +373,7 @@ cmd_help(int argc, char * const argv[])
     printf("Ori Distributed Personal File System (%s) - Command Line Interface\n\n",
             ORI_VERSION_STR);
     printf("Available commands:\n");
-    for (i = 0; commands[i].name != NULL; i++)
+    for (i = 0; commands[i].name != nullptr; i++)
     {
         const char *flag = "";
 #ifndef DEBUG
@@ -384,7 +384,7 @@ cmd_help(int argc, char * const argv[])
             flag = " (DEBUG)";
         if (commands[i].flags & CMD_EXPERIMENTAL)
             flag = " (EXPERIMENTAL)";
-        if (commands[i].desc != NULL)
+        if (commands[i].desc != nullptr)
             printf("%-15s %s%s\n", commands[i].name, commands[i].desc, flag);
     }
 
@@ -460,13 +460,13 @@ main(int argc, char *argv[])
     int idx;
 
     if (argc == 1) {
-        return cmd_help(0, NULL);
+        return cmd_help(0, nullptr);
     }
 
     idx = lookupcmd(argv[1]);
     if (idx == -1) {
         printf("Unknown command '%s'\n", argv[1]);
-        cmd_help(0, NULL);
+        cmd_help(0, nullptr);
         return 1;
     }
 
@@ -475,7 +475,7 @@ main(int argc, char *argv[])
     ori_open_log(logPath);
 #endif
 
-    client = NULL;
+    client = nullptr;
     if (commands[idx].flags & CMD_NEED_FUSE) {
         string repoPath;
 

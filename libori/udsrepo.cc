@@ -40,12 +40,12 @@ using namespace std;
  */
 
 UDSRepo::UDSRepo()
-    : client(NULL), containedObjs(NULL)
+    : client(nullptr), containedObjs(nullptr)
 {
 }
 
 UDSRepo::UDSRepo(UDSClient *client)
-    : client(client), containedObjs(NULL)
+    : client(client), containedObjs(nullptr)
 {
 }
 
@@ -178,7 +178,7 @@ UDSRepo::getObjects(const ObjectHashVec &objs)
     if (ok) {
         return bs.release();
     }
-    return NULL;
+    return nullptr;
 }
 
 ObjectInfo
@@ -381,7 +381,7 @@ void UDSRepo::_clearPayload(const ObjectHash &id)
 UDSObject::UDSObject(UDSRepo *repo, ObjectInfo info)
     : Object(info), repo(repo)
 {
-    ASSERT(repo != NULL);
+    ASSERT(repo != nullptr);
     ASSERT(!info.hash.isEmpty());
 }
 

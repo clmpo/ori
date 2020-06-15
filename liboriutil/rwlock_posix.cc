@@ -43,7 +43,7 @@
 RWLock::RWLock()
     : lockHandle()
 {
-    pthread_rwlock_init(&lockHandle, NULL);
+    pthread_rwlock_init(&lockHandle, nullptr);
     lockNum = gLockNum++;
 }
 

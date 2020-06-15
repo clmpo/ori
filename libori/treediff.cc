@@ -332,7 +332,7 @@ TreeDiff::getLatestEntry(const std::string &path) const
     unordered_map<std::string, size_t>::const_iterator it =
         latestEntries.find(path);
     if (it == latestEntries.end()) {
-        return NULL;
+        return nullptr;
     }
 
     return &entries[(*it).second];
@@ -344,7 +344,7 @@ TreeDiff::getLatestEntry(const std::string &path)
     unordered_map<std::string, size_t>::iterator it =
         latestEntries.find(path);
     if (it == latestEntries.end()) {
-        return NULL;
+        return nullptr;
     }
 
     return &entries[(*it).second];
@@ -369,7 +369,7 @@ bool TreeDiff::mergeInto(const TreeDiffEntry &to_merge)
     // Special case for rename
     if (to_merge.type == TreeDiffEntry::Renamed) {
             const TreeDiffEntry *dest_e = getLatestEntry(to_merge.newFilename);
-        if (dest_e != NULL && dest_e->type != TreeDiffEntry::DeletedFile &&
+        if (dest_e != nullptr && dest_e->type != TreeDiffEntry::DeletedFile &&
                 dest_e->type != TreeDiffEntry::DeletedDir) {
             printf("TreeDiff::mergeInto: cannot replace an existing file with Renamed\n");
             NOT_IMPLEMENTED(false);
@@ -380,7 +380,7 @@ bool TreeDiff::mergeInto(const TreeDiffEntry &to_merge)
     }
 
     TreeDiffEntry *e = getLatestEntry(to_merge.filepath);
-    if (e == NULL) {
+    if (e == nullptr) {
         // XXX: Excessive logging
         // printf("TreeDiff::merge: appending %s\n", 
         // to_merge.filepath.c_str());
@@ -636,7 +636,7 @@ TreeDiff::mergeTrees(const TreeDiff &d1, const TreeDiff &d2)
         // Look in other diff
         const TreeDiffEntry *e = d1.getLatestEntry(i2->filepath);
 
-        if (e == NULL &&
+        if (e == nullptr &&
             (i2->type == TreeDiffEntry::NewFile ||
              i2->type == TreeDiffEntry::NewDir ||
              i2->type == TreeDiffEntry::DeletedFile || 

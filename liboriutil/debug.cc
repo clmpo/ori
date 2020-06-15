@@ -181,7 +181,7 @@ void ori_terminate() {
     names = backtrace_symbols(array, num);
     ori_log(LEVEL_SYS, "Backtrace:\n");
     for (int i = 0; i < num; i++) {
-        if (names != NULL)
+        if (names != nullptr)
             ori_log(LEVEL_SYS, "[%d] %s\n", i, names[i]);
         else
             ori_log(LEVEL_SYS, "[%d] [0x%p]\n", i, array[i]);
@@ -208,7 +208,7 @@ void ori_sighandler(int signum)
     names = backtrace_symbols(array, num);
     ori_log(LEVEL_SYS, "Backtrace:\n");
     for (int i = 0; i < num; i++) {
-        if (names != NULL)
+        if (names != nullptr)
             ori_log(LEVEL_SYS, "[%d] %s\n", i, names[i]);
         else
             ori_log(LEVEL_SYS, "[%d] [0x%p]\n", i, array[i]);

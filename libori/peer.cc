@@ -165,7 +165,7 @@ Peer::getRepo()
             sc->connect();
         }
     } else {
-        char *path = realpath(url.c_str(), NULL);
+        char *path = realpath(url.c_str(), nullptr);
         LocalRepo *local = new LocalRepo(path);
         local->open(path);
         cachedRepo.reset(local);

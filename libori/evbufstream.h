@@ -38,7 +38,7 @@ private:
 class evbufwstream : public bytewstream
 {
 public:
-    evbufwstream(struct evbuffer *inbuf = NULL);
+    evbufwstream(struct evbuffer *inbuf = nullptr);
     ~evbufwstream();
     ssize_t write(const void *ptr, size_t n);
 

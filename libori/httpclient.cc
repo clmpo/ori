@@ -93,17 +93,17 @@ HttpClient::connect()
 
     base = event_base_new();
     dnsBase = evdns_base_new(base, /* Add DNS servers */ 0);
-    if (dnsBase == NULL) {
+    if (dnsBase == nullptr) {
         WARNING("HTTP client couldn't set up evdns!");
         return -1;
     }
 
-    port = strtoul(remotePort.c_str(), NULL, 10);
+    port = strtoul(remotePort.c_str(), nullptr, 10);
 
     // Can't get evdns to work, using Util_ResolveHost
     std::string remoteIP = OriNet_ResolveHost(remoteHost);
     con = evhttp_connection_base_new(base, dnsBase, remoteIP.c_str(), port);
-    if (con == NULL) {
+    if (con == nullptr) {
         WARNING("HTTP client couldn't set up connection!");
         return -1;
     }
@@ -121,9 +121,9 @@ HttpClient::disconnect()
         evdns_base_free(dnsBase, 0);
     if (base)
         event_base_free(base);
-    con = NULL;
-    dnsBase = NULL;
-    base = NULL;
+    con = nullptr;
+    dnsBase = nullptr;
+    base = nullptr;
 }
 
 bool
@@ -148,15 +148,15 @@ HttpClient_requestDoneCB(struct evhttp_request *req, void *r)
     struct evbuffer *bufIn;
 
     if (!req) {
-        WARNING("req is NULL!");
-        event_base_loopexit(client->base, NULL);
+        WARNING("req is nullptr!");
+        event_base_loopexit(client->base, nullptr);
         return;
     }
 
     status = evhttp_request_get_response_code(req);
     if (status != HTTP_OK) {
         WARNING("HTTP request failed!");
-        event_base_loopexit(client->base, NULL);
+        event_base_loopexit(client->base, nullptr);
         return;
     }
 
@@ -170,15 +170,15 @@ HttpClient_requestDoneCB(struct evhttp_request *req, void *r)
      */
     int len = evbuffer_get_length(bufIn);
     char *data = (char *)evbuffer_pullup(bufIn, len);
-    if (data == NULL) {
+    if (data == nullptr) {
         WARNING("Error running evbuffer_pullup");
-        event_base_loopexit(client->base, NULL);
+        event_base_loopexit(client->base, nullptr);
         return;
     }
 
     cb->response->assign(data, len);
 
-    event_base_loopexit(client->base, NULL);
+    event_base_loopexit(client->base, nullptr);
 }
 
 int

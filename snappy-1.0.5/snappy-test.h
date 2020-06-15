@@ -126,7 +126,7 @@ namespace File {
 
   void ReadFileToStringOrDie(const char* filename, string* data) {
     FILE* fp = fopen(filename, "rb");
-    if (fp == NULL) {
+    if (fp == nullptr) {
       perror(filename);
       exit(1);
     }
@@ -151,7 +151,7 @@ namespace File {
 
   void WriteStringToFileOrDie(const string& str, const char* filename) {
     FILE* fp = fopen(filename, "wb");
-    if (fp == NULL) {
+    if (fp == nullptr) {
       perror(filename);
       exit(1);
     }
@@ -249,7 +249,7 @@ class CycleTimer {
 #ifdef WIN32
     QueryPerformanceCounter(&start_);
 #else
-    gettimeofday(&start_, NULL);
+    gettimeofday(&start_, nullptr);
 #endif
   }
 
@@ -265,7 +265,7 @@ class CycleTimer {
     real_time_us_ += elapsed * 1e6 + 0.5;
 #else
     struct timeval stop;
-    gettimeofday(&stop, NULL);
+    gettimeofday(&stop, nullptr);
 
     real_time_us_ += 1000000 * (stop.tv_sec - start_.tv_sec);
     real_time_us_ += (stop.tv_usec - start_.tv_usec);

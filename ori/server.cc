@@ -264,7 +264,7 @@ cmd_sshserver(int argc, char * const argv[])
     Util_SetBlocking(STDOUT_FILENO, true);
 
     // Disable output buffering
-    setvbuf(stdout, NULL, _IONBF, 0); // libc
+    setvbuf(stdout, nullptr, _IONBF, 0); // libc
 #ifdef __APPLE__
     fcntl(STDOUT_FILENO, F_NOCACHE, 1); // os x
 #endif /* __APPLE__ */

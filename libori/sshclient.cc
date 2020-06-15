@@ -105,7 +105,7 @@ int SshClient::connect()
 
         // Run ssh
         execlp("/usr/bin/ssh", "ssh", remoteHost.c_str(), "ori", "sshserver",
-                remoteRepo.c_str(), NULL);
+                remoteRepo.c_str(), nullptr);
         perror("execlp failed");
         return -errno;
     }

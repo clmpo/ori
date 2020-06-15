@@ -478,7 +478,7 @@ class Varint {
   // Attempts to parse a varint32 from a prefix of the bytes in [ptr,limit-1].
   // Never reads a character at or beyond limit.  If a valid/terminated varint32
   // was found in the range, stores it in *OUTPUT and returns a pointer just
-  // past the last byte of the varint32. Else returns NULL.  On success,
+  // past the last byte of the varint32. Else returns nullptr.  On success,
   // "result <= limit".
   static const char* Parse32WithLimit(const char* ptr, const char* limit,
                                       uint32* OUTPUT);
@@ -498,17 +498,17 @@ inline const char* Varint::Parse32WithLimit(const char* p,
   const unsigned char* ptr = reinterpret_cast<const unsigned char*>(p);
   const unsigned char* limit = reinterpret_cast<const unsigned char*>(l);
   uint32 b, result;
-  if (ptr >= limit) return NULL;
+  if (ptr >= limit) return nullptr;
   b = *(ptr++); result = b & 127;          if (b < 128) goto done;
-  if (ptr >= limit) return NULL;
+  if (ptr >= limit) return nullptr;
   b = *(ptr++); result |= (b & 127) <<  7; if (b < 128) goto done;
-  if (ptr >= limit) return NULL;
+  if (ptr >= limit) return nullptr;
   b = *(ptr++); result |= (b & 127) << 14; if (b < 128) goto done;
-  if (ptr >= limit) return NULL;
+  if (ptr >= limit) return nullptr;
   b = *(ptr++); result |= (b & 127) << 21; if (b < 128) goto done;
-  if (ptr >= limit) return NULL;
+  if (ptr >= limit) return nullptr;
   b = *(ptr++); result |= (b & 127) << 28; if (b < 16) goto done;
-  return NULL;       // Value is too long to be a varint32
+  return nullptr;       // Value is too long to be a varint32
  done:
   *OUTPUT = result;
   return reinterpret_cast<const char*>(ptr);
@@ -563,7 +563,7 @@ inline void STLStringResizeUninitialized(string* s, size_t new_size) {
 // proposes this as the method. It will officially be part of the standard
 // for C++0x. This should already work on all current implementations.
 inline char* string_as_array(string* str) {
-  return str->empty() ? NULL : &*str->begin();
+  return str->empty() ? nullptr : &*str->begin();
 }
 
 }  // namespace snappy

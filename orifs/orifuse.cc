@@ -681,17 +681,17 @@ ori_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 
     FUSE_LOG("FUSE ori_readdir(path=\"%s\", offset=%" PRId64 ")", path, offset);
 
-    filler(buf, ".", NULL, 0);
-    filler(buf, "..", NULL, 0);
+    filler(buf, ".", nullptr, 0);
+    filler(buf, "..", nullptr, 0);
     if (strcmp(path, "/") == 0) {
-        filler(buf, ORI_CONTROL_FILENAME, NULL, 0);
-        filler(buf, ORI_SNAPSHOT_DIRNAME, NULL, 0);
+        filler(buf, ORI_CONTROL_FILENAME, nullptr, 0);
+        filler(buf, ORI_SNAPSHOT_DIRNAME, nullptr, 0);
     } else if (strcmp(path, ORI_SNAPSHOT_DIRPATH) == 0) {
         map<string, ObjectHash> snapshots = priv->listSnapshots();
         map<string, ObjectHash>::iterator it;
 
         for (it = snapshots.begin(); it != snapshots.end(); it++) {
-            filler(buf, (*it).first.c_str(), NULL, 0);
+            filler(buf, (*it).first.c_str(), nullptr, 0);
         }
 
         return 0;
@@ -721,7 +721,7 @@ ori_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
         for (map<string, TreeEntry>::iterator it = t.tree.begin();
              it != t.tree.end();
              it++) {
-            filler(buf, (*it).first.c_str(), NULL, 0);
+            filler(buf, (*it).first.c_str(), nullptr, 0);
         }
 
         return 0;
@@ -742,7 +742,7 @@ ori_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
             filler(buf, (*it).first.c_str(), &info->statInfo, 0);
         } catch (const SystemException& e) {
             FUSE_LOG("Unexpected %s", e.what());
-            filler(buf, (*it).first.c_str(), NULL, 0);
+            filler(buf, (*it).first.c_str(), nullptr, 0);
         }
     }
 
@@ -1199,7 +1199,7 @@ main(int argc, char *argv[])
 
     // If we want to show version or help, it's best to do this fast.
     if (config.show_version || config.show_help) {
-          int ret = fuse_main(args.argc, args.argv, &ori_oper, NULL);
+          int ret = fuse_main(args.argc, args.argv, &ori_oper, nullptr);
       fuse_opt_free_args(&args);
       return ret;
     }
@@ -1328,7 +1328,7 @@ main(int argc, char *argv[])
         cout << "Mount Point:   " << config.mountPoint << endl;
     }
 
-    int status = fuse_main(args.argc, args.argv, &ori_oper, NULL);
+    int status = fuse_main(args.argc, args.argv, &ori_oper, nullptr);
     if (status != 0) {
         priv->cleanup();
     }

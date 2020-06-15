@@ -23,7 +23,7 @@
 
 Mutex::Mutex()
 {
-    pthread_mutex_init(&lockHandle, NULL);
+    pthread_mutex_init(&lockHandle, nullptr);
 }
 
 Mutex::~Mutex()

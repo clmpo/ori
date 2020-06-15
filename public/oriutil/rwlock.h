@@ -46,7 +46,7 @@ struct RWKey {
 };
 struct ReaderKey : public RWKey {
 protected:
-    ReaderKey(RWLock *l = NULL);
+    ReaderKey(RWLock *l = nullptr);
 public:
     virtual ~ReaderKey();
 private:
@@ -55,7 +55,7 @@ private:
 };
 struct WriterKey : public RWKey {
 protected:
-    WriterKey(RWLock *l = NULL);
+    WriterKey(RWLock *l = nullptr);
 public:
     virtual ~WriterKey();
 private:

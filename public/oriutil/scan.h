@@ -48,10 +48,10 @@ DirIterate(const std::string &path,
         dir = opendir(path.c_str());
     }
 
-    if (dir == NULL)
+    if (dir == nullptr)
         return 1;
 
-    while ((entry = readdir(dir)) != NULL) {
+    while ((entry = readdir(dir)) != nullptr) {
         if (path != "") {
             fullpath = path + "/";
         } else {
@@ -68,7 +68,7 @@ DirIterate(const std::string &path,
         if (strcmp(entry->d_name, ".ori") == 0)
             continue;
 
-        if (f != NULL) {
+        if (f != nullptr) {
             status = f(arg, fullpath);
             if (status != 0) {
                 closedir(dir);
@@ -91,8 +91,8 @@ DirTraverse(const std::string &path,
            int (*f)(T, const std::string&))
 {
     int status;
-    DIR *dir = NULL;
-    struct dirent *entry = NULL;
+    DIR *dir = nullptr;
+    struct dirent *entry = nullptr;
     std::string fullpath;
 
     if (path == "") {
@@ -101,12 +101,12 @@ DirTraverse(const std::string &path,
         dir = opendir(path.c_str());
     }
 
-    if (dir == NULL) {
+    if (dir == nullptr) {
         perror("Scan_RTraverse opendir");
         return -1;
     }
 
-    while ((entry = readdir(dir)) != NULL) {
+    while ((entry = readdir(dir)) != nullptr) {
         if (path != "") {
             fullpath = path + "/";
         } else {
@@ -123,7 +123,7 @@ DirTraverse(const std::string &path,
         if (strcmp(entry->d_name, ".ori") == 0)
             continue;
 
-        if (f != NULL) {
+        if (f != nullptr) {
             status = f(arg, fullpath);
             if (status != 0) {
                 closedir(dir);
@@ -158,8 +158,8 @@ DirRTraverse(const std::string &path,
            int (*f)(T, const std::string&))
 {
     int status;
-    DIR *dir = NULL;
-    struct dirent *entry = NULL;
+    DIR *dir = nullptr;
+    struct dirent *entry = nullptr;
     std::string fullpath;
 
     if (path == "") {
@@ -168,12 +168,12 @@ DirRTraverse(const std::string &path,
         dir = opendir(path.c_str());
     }
 
-    if (dir == NULL) {
+    if (dir == nullptr) {
         perror("Scan_RTraverse opendir");
         return -1;
     }
 
-    while ((entry = readdir(dir)) != NULL) {
+    while ((entry = readdir(dir)) != nullptr) {
         if (path != "") {
             fullpath = path + "/";
         } else {
@@ -201,7 +201,7 @@ DirRTraverse(const std::string &path,
             }
         }
 
-        if (f != NULL) {
+        if (f != nullptr) {
             status = f(arg, fullpath);
             if (status != 0) {
                 closedir(dir);

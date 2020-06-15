@@ -85,7 +85,7 @@ void AttrMap::setCreation(mode_t perms)
     attrs[ATTR_USERNAME] = upw->pw_name;
     attrs[ATTR_GROUPNAME] = ggr->gr_name;
 
-    time_t currTime = time(NULL);
+    time_t currTime = time(nullptr);
     setAs<time_t>(ATTR_CTIME, currTime);
     setAs<time_t>(ATTR_MTIME, currTime);
 }

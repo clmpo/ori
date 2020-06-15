@@ -24,14 +24,14 @@
 
 #include "logging.h"
 
-FILE *logfd = NULL;
+FILE *logfd = nullptr;
 
 void
 ori_fuse_log_enable()
 {
-    if (logfd == NULL) {
+    if (logfd == nullptr) {
         logfd = fopen("fuse.log", "wb+");
-        if (logfd == NULL) {
+        if (logfd == nullptr) {
             perror("fopen");
             exit(1);
         } 
@@ -44,7 +44,7 @@ ori_fuse_log(const char *what, ...)
     va_list vl;
     va_start(vl, what);
 
-    if (logfd == NULL) {
+    if (logfd == nullptr) {
         return;
     }
 

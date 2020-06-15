@@ -62,7 +62,7 @@ public:
         KVSerializer kv;
         int i = 0;
 
-        kv.putU64("time", (int64_t)time(NULL));
+        kv.putU64("time", (int64_t)time(nullptr));
         kv.putStr("username", username);
         kv.putStr("host", host);
         kv.putStr("hostId", hostId);

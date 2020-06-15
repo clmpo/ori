@@ -72,7 +72,7 @@ HTTPServerReqHandlerCB(struct evhttp_request *req, void *arg)
 }
 
 HTTPServer::HTTPServer(LocalRepo &repository, uint16_t port)
-    : repo(repository), port(port), httpd(NULL), base(NULL)
+    : repo(repository), port(port), httpd(nullptr), base(nullptr)
 {
     base = event_base_new();
     event_set_log_callback(HTTPServerLogCB);
@@ -104,7 +104,7 @@ HTTPServer::start(bool mDNSEnable)
 void
 HTTPServer::stop()
 {
-    event_base_loopexit(base, NULL);
+    event_base_loopexit(base, nullptr);
 }
 
 void
@@ -162,7 +162,7 @@ HTTPServer::authenticate(struct evhttp_request *req, struct evbuffer *buf)
     int n;
     char output[64];
     const char *as = evhttp_find_header(req->input_headers, "Authorization");
-    if (as == NULL) {
+    if (as == nullptr) {
 	goto authFailed;
     }
 
@@ -188,7 +188,7 @@ HTTPServer::stop(struct evhttp_request *req)
     struct evbuffer *buf;
 
     buf = evbuffer_new();
-    if (buf == NULL) {
+    if (buf == nullptr) {
         LOG("couldn't allocate evbuffer!");
         evhttp_send_error(req, HTTP_INTERNAL, "Internal Error");
         return;
@@ -201,7 +201,7 @@ HTTPServer::stop(struct evhttp_request *req)
 
     evbuffer_add_printf(buf, "Stopping\n");
     evhttp_send_reply(req, HTTP_OK, "OK", buf);
-    event_base_loopexit(base, NULL);
+    event_base_loopexit(base, nullptr);
 }
 
 void
@@ -213,7 +213,7 @@ HTTPServer::getId(struct evhttp_request *req)
     DLOG("httpd: getid");
 
     buf = evbuffer_new();
-    if (buf == NULL) {
+    if (buf == nullptr) {
         LOG("couldn't allocate evbuffer!");
         evhttp_send_error(req, HTTP_INTERNAL, "Internal Error");
         return;
@@ -233,7 +233,7 @@ HTTPServer::getVersion(struct evhttp_request *req)
     DLOG("httpd: getversion");
 
     buf = evbuffer_new();
-    if (buf == NULL) {
+    if (buf == nullptr) {
         LOG("couldn't allocate evbuffer!");
         evhttp_send_error(req, HTTP_INTERNAL, "Internal Error");
         return;
@@ -253,7 +253,7 @@ HTTPServer::head(struct evhttp_request *req)
     DLOG("httpd: gethead %s", headId.hex().c_str());
 
     buf = evbuffer_new();
-    if (buf == NULL) {
+    if (buf == nullptr) {
         LOG("couldn't allocate evbuffer!");
         evhttp_send_error(req, HTTP_INTERNAL, "Internal Error");
         return;
@@ -390,7 +390,7 @@ HTTPServer::getObjInfo(struct evhttp_request *req)
     DLOG("httpd: getobjinfo %s", sObjId.c_str());
 
     Object::sp obj = repo.getObject(ObjectHash::fromHex(sObjId));
-    if (obj == NULL) {
+    if (obj == nullptr) {
         evhttp_send_reply(req, HTTP_NOTFOUND, "Object Not Found", evbuffer_new());
         return;
     }
@@ -417,14 +417,14 @@ HTTPServer::getObjInfo(struct evhttp_request *req)
 //     void *buf;
 // 
 //     outbuf = evbuffer_new();
-//     if (outbuf == NULL) {
+//     if (outbuf == nullptr) {
 //         LOG("couldn't allocate evbuffer!");
 //         evhttp_send_error(req, HTTP_INTERNAL, "Internal Error");
 //         return;
 //     }
 // 
 //     // Make sure it makes sense
-//     if (cl == NULL) {
+//     if (cl == nullptr) {
 //         evhttp_send_error(req, HTTP_BADREQUEST, "Bad Request");
 //         return;
 //     }

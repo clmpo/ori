@@ -649,7 +649,7 @@ zipstream::zipstream(bytestream *source, bool compress, size_t size_hint)
       offset(0),
       output_ended(false)
 {
-    assert(source != NULL);
+    assert(source != nullptr);
     if (size_hint > 0) {
         output.resize(size_hint);
     }

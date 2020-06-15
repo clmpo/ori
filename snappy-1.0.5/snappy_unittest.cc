@@ -84,7 +84,7 @@ class DataEndingAtUnreadablePage {
     // Round up space for string to a multiple of page_size.
     size_t space_for_string = (size + page_size - 1) & ~(page_size - 1);
     alloc_size_ = space_for_string + page_size;
-    mem_ = mmap(NULL, alloc_size_,
+    mem_ = mmap(nullptr, alloc_size_,
                 PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
     CHECK_NE(MAP_FAILED, mem_);
     protected_page_ = reinterpret_cast<char*>(mem_) + space_for_string;
@@ -314,7 +314,7 @@ static bool Uncompress(const string& compressed, CompressorType comp,
           compressed.size(),
           reinterpret_cast<uint8*>(string_as_array(output)),
           &destlen,
-          NULL);
+          nullptr);
       CHECK_EQ(LZO_E_OK, ret);
       CHECK_EQ(static_cast<lzo_uint>(size), destlen);
       break;

@@ -66,7 +66,7 @@ string StringPrintf(const char* format, ...) {
 bool benchmark_running = false;
 int64 benchmark_real_time_us = 0;
 int64 benchmark_cpu_time_us = 0;
-string *benchmark_label = NULL;
+string *benchmark_label = nullptr;
 int64 benchmark_bytes_processed = 0;
 
 void ResetBenchmarkTiming() {
@@ -89,7 +89,7 @@ void StartBenchmarkTiming() {
   CHECK(GetProcessTimes(
       GetCurrentProcess(), &dummy, &dummy, &dummy, &benchmark_start_cpu));
 #else
-  gettimeofday(&benchmark_start_real, NULL);
+  gettimeofday(&benchmark_start_real, nullptr);
   if (getrusage(RUSAGE_SELF, &benchmark_start_cpu) == -1) {
     perror("getrusage(RUSAGE_SELF)");
     exit(1);
@@ -130,7 +130,7 @@ void StopBenchmarkTiming() {
       (stop_ulargeint.QuadPart - start_ulargeint.QuadPart + 5) / 10;
 #else  // WIN32
   struct timeval benchmark_stop_real;
-  gettimeofday(&benchmark_stop_real, NULL);
+  gettimeofday(&benchmark_stop_real, nullptr);
   benchmark_real_time_us +=
       1000000 * (benchmark_stop_real.tv_sec - benchmark_start_real.tv_sec);
   benchmark_real_time_us +=

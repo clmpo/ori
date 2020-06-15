@@ -1072,7 +1072,7 @@ LocalRepo::multiPull(RemoteRepo::sp defaultRemote)
     struct event_base *evbase = event_base_new();
 #ifndef WITHOUT_MDNS 
     struct event *mdns_event = MDNS_Browse(evbase);
-    event_add(mdns_event, NULL);
+    event_add(mdns_event, nullptr);
     MDNS_RegisterBrowseCallback(std::bind(&MultiPullOp::addCandidate,
                 &mpo, std::placeholders::_1));
 #endif
@@ -1369,7 +1369,7 @@ LocalRepo::commitFromTree(const ObjectHash &treeHash, Commit &c,
     if (c.getMessage().size() == 0)
         c.setMessage("No message.");
     if (c.getTime() == 0)
-        c.setTime(time(NULL));
+        c.setTime(time(nullptr));
     if (c.getUser().size() == 0) {
         string user = Util_GetFullname();
         c.setUser(user);
@@ -1495,7 +1495,7 @@ LocalRepo::hasObject(const ObjectHash &objId)
 
     Monitor lock(remoteLock);
 
-    if (remoteRepo != NULL) {
+    if (remoteRepo != nullptr) {
         return remoteRepo->hasObject(objId);
     }
 
@@ -1514,7 +1514,7 @@ LocalRepo::getObjectInfo(const ObjectHash &objId)
     
     Monitor lock(remoteLock);
 
-    if (remoteRepo != NULL) {
+    if (remoteRepo != nullptr) {
         return remoteRepo->getObjectInfo(objId);
     }
 
@@ -2287,7 +2287,7 @@ LocalRepo::newTempDir()
     char templ[PATH_MAX];
     strncpy(templ, dir_templ.c_str(), PATH_MAX);
 
-    if (mkdtemp(templ) == NULL) {
+    if (mkdtemp(templ) == nullptr) {
         perror("mkdtemp");
         return TempDir::sp();
     }
@@ -2450,8 +2450,8 @@ LocalRepo::findRootPath(const string &path)
 {
     string root = path;
     if (path.size() == 0) {
-        char *cwd = getcwd(NULL, MAXPATHLEN);
-        if (cwd == NULL) {
+        char *cwd = getcwd(nullptr, MAXPATHLEN);
+        if (cwd == nullptr) {
             perror("getcwd");
             exit(1);
         }

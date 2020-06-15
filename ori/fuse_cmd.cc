@@ -37,7 +37,7 @@ bool OF_HasFuse()
 
 std::string OF_RootPath()
 {
-    char *cwdbuf = getcwd(NULL, 0);
+    char *cwdbuf = getcwd(nullptr, 0);
     std::string path = cwdbuf;
     free(cwdbuf);
 
@@ -54,7 +54,7 @@ std::string OF_RootPath()
 
 std::string OF_ControlPath()
 {
-    char *cwdbuf = getcwd(NULL, 0);
+    char *cwdbuf = getcwd(nullptr, 0);
     std::string path = cwdbuf;
     free(cwdbuf);
 

@@ -43,7 +43,7 @@ MdTransaction::MdTransaction(MetadataLog *log)
 
 MdTransaction::~MdTransaction()
 {
-    if (log != NULL) {
+    if (log != nullptr) {
         log->commit(this);
     }
 }
@@ -165,9 +165,9 @@ MetadataLog::sync()
 void
 MetadataLog::rewrite(const RefcountMap *refs, const MetadataMap *data)
 {
-    if (refs == NULL)
+    if (refs == nullptr)
         refs = &refcounts;
-    if (data == NULL)
+    if (data == nullptr)
         data = &metadata;
 
     string tmpFilename = filename + ".tmp";

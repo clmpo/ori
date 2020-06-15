@@ -41,7 +41,7 @@
 using namespace std;
 
 extern OriPriv *priv;
-static UDSServer *server = NULL;
+static UDSServer *server = nullptr;
 
 string
 UDSExtensionCB(LocalRepo *repo, const string &data)
@@ -68,7 +68,7 @@ UDSServerStart(LocalRepo *repo)
 void
 UDSServerStop()
 {
-    if (server != NULL) {
+    if (server != nullptr) {
         server->shutdown();
     }
     delete server;

@@ -22,7 +22,7 @@
 evbufstream::evbufstream(struct evbuffer *inbuf)
     : buf(inbuf), bufSize(0)
 {
-    ASSERT(inbuf != NULL);
+    ASSERT(inbuf != nullptr);
     bufSize = evbuffer_get_length(buf);
 }
 
@@ -48,9 +48,9 @@ size_t evbufstream::sizeHint() const
 evbufwstream::evbufwstream(struct evbuffer *inbuf)
     : _buf(inbuf), owner(false)
 {
-    if (inbuf == NULL) {
+    if (inbuf == nullptr) {
         _buf = evbuffer_new();
-        if (_buf == NULL) {
+        if (_buf == nullptr) {
             LOG("evbufwstream: evbuffer_new failed!");
             throw std::runtime_error("evbuffer_new failed");
         }
@@ -60,7 +60,7 @@ evbufwstream::evbufwstream(struct evbuffer *inbuf)
 
 evbufwstream::~evbufwstream()
 {
-    if (_buf != NULL && owner) {
+    if (_buf != nullptr && owner) {
         evbuffer_free(_buf);
     }
 }

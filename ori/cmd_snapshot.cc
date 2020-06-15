@@ -57,11 +57,11 @@ cmd_snapshot(int argc, char * const argv[])
     string name;
 
     struct option longopts[] = {
-        { "message",    required_argument,  NULL,   'm' },
-        { NULL,         0,                  NULL,   0   }
+        { "message",    required_argument,  nullptr,   'm' },
+        { nullptr,         0,                  nullptr,   0   }
     };
 
-    while ((ch = getopt_long(argc, argv, "m:", longopts, NULL)) != -1) {
+    while ((ch = getopt_long(argc, argv, "m:", longopts, nullptr)) != -1) {
         switch (ch) {
             case 'm':
                 hasMsg = true;

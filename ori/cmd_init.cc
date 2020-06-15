@@ -60,11 +60,11 @@ cmd_init(int argc, char * const argv[])
     bool bareRepo = true;
     
     struct option longopts[] = {
-        { "non-bare",   no_argument,    NULL,   'n' },
-        { NULL,         0,              NULL,   0   }
+        { "non-bare",   no_argument,    nullptr,   'n' },
+        { nullptr,         0,              nullptr,   0   }
     };
 
-    while ((ch = getopt_long(argc, argv, "n", longopts, NULL)) != -1) {
+    while ((ch = getopt_long(argc, argv, "n", longopts, nullptr)) != -1) {
         switch (ch) {
             case 'n':
                 bareRepo = false;
@@ -78,7 +78,7 @@ cmd_init(int argc, char * const argv[])
     argv += optind;
 
     if (argc == 0) {
-        char *cwd = getcwd(NULL, MAXPATHLEN);
+        char *cwd = getcwd(nullptr, MAXPATHLEN);
         rootPath = cwd;
         free(cwd);
     } else if (argc == 1) {

@@ -100,10 +100,10 @@ cmd_graft(int argc, char * const argv[])
 
         if (OriFile_IsDirectory(srcRelPath)) {
             execl("/bin/cp", "cp", "-r", srcRelPath.c_str(), dstFile.c_str(),
-                  (char *)NULL);
+                  (char *)nullptr);
         } else {
             execl("/bin/cp", "cp", srcRelPath.c_str(), dstFile.c_str(),
-                  (char *)NULL);
+                  (char *)nullptr);
         }
 
         return 0;

@@ -36,7 +36,7 @@
 using namespace std;
 
 RemoteRepo::RemoteRepo()
-    : r(NULL)
+    : r(nullptr)
 {
 }
 
@@ -60,14 +60,14 @@ RemoteRepo::connect(const string &url)
             return (sc->connect() == 0);
         }
     } else {
-        UDSClient *udsClient = NULL;
+        UDSClient *udsClient = nullptr;
         try {
             udsClient = new UDSClient(url);
             int status = udsClient->connect();
             uc.reset(udsClient);
             r = new UDSRepo(uc.get());
             return (status == 0);
-        } catch (const SystemException& e) {
+        } catch (SystemException e) {
             delete udsClient;
         }
         LocalRepo *lr = new LocalRepo(url);

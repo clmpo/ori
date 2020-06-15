@@ -144,14 +144,14 @@ void MDNS_Register(uint16_t port_num)
     DNSServiceErrorType err = DNSServiceRegister(
             &registerRef,
             0, 0,
-            NULL, // service name
+            nullptr, // service name
             ORI_SERVICE_TYPE,
-            NULL, // domain
-            NULL, // host
+            nullptr, // domain
+            nullptr, // host
             htons(port_num),
-            0, NULL, // txtRecord
+            0, nullptr, // txtRecord
             _register_callback,
-            NULL);
+            nullptr);
     if (err != kDNSServiceErr_NoError) {
         printf("Error setting up mDNS!\n");
         return;
@@ -171,9 +171,9 @@ struct event *MDNS_Browse(struct event_base *evbase)
             &browseRef,
             0, 0,
             ORI_SERVICE_TYPE,
-            NULL, // domain,
+            nullptr, // domain,
             _browse_callback,
-            NULL);
+            nullptr);
     if (err != kDNSServiceErr_NoError) {
         printf("Error browsing mDNS!\n");
         exit(1);
@@ -184,9 +184,9 @@ struct event *MDNS_Browse(struct event_base *evbase)
     int fd = DNSServiceRefSockFD(browseRef);
     if (fd < 0) {
         printf("Error getting mDNS socket\n");
-        return NULL;
+        return nullptr;
     }
-    return event_new(evbase, fd, EV_READ | EV_PERSIST, ori_run_mdns, NULL);
+    return event_new(evbase, fd, EV_READ | EV_PERSIST, ori_run_mdns, nullptr);
 }
 
 void
@@ -234,7 +234,7 @@ int cmd_mdnsserver(int argc, char * const argv[])
     printf("Starting mDNS server...\n");
     struct event_base *evbase = event_base_new();
     struct event *mdns_event = MDNS_Browse(evbase);
-    event_add(mdns_event, NULL);
+    event_add(mdns_event, nullptr);
 
     MDNS_RegisterBrowseCallback(_print_cb);
 

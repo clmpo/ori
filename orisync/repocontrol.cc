@@ -53,7 +53,7 @@ RepoControl::open()
      } catch (const std::exception& e) {
         if (localRepo)
             delete localRepo;
-        localRepo = NULL;
+        localRepo = nullptr;
         WARNING("%s", e.what());
         throw SystemException();
      }

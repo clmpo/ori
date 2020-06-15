@@ -47,7 +47,7 @@ public:
     FileChunkerCB()
     {
         lbOff = 0;
-        buf = NULL;
+        buf = nullptr;
     }
     ~FileChunkerCB()
     {
@@ -62,7 +62,7 @@ public:
 
         bufLen = 8 * 1024 * 1024;
         buf = new uint8_t[bufLen];
-        if (buf == NULL)
+        if (buf == nullptr)
             return -ENOMEM;
 
         srcFd = ::open(path.c_str(), O_RDONLY);
@@ -90,7 +90,7 @@ public:
     {
         printf("buf = %p, l = %08" PRIx64 "x, o = %08" PRIx64 "\n", *b,*l, *o);
 
-        if (*b == NULL)
+        if (*b == nullptr)
             *b = buf;
 
         if (fileOff == fileLen)

@@ -83,7 +83,7 @@ bytestream *LocalObject::getPayloadStream() {
                 NOT_IMPLEMENTED(false);
         }
     }
-    return NULL;
+    return nullptr;
 }
 
 /*

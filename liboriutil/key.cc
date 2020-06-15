@@ -65,7 +65,7 @@ using namespace std;
 #define SIGBUF_LEN 2048
 
 PublicKey::PublicKey()
-    : x509(NULL), key(NULL)
+    : x509(nullptr), key(nullptr)
 {
 }
 
@@ -79,19 +79,19 @@ void
 PublicKey::open(const string &keyfile)
 {
     FILE *f = fopen(keyfile.c_str(), "r");
-    if (f == NULL)
+    if (f == nullptr)
         throw exception();
 
-    x509 = PEM_read_X509(f, NULL, NULL, NULL);
+    x509 = PEM_read_X509(f, nullptr, nullptr, nullptr);
     fclose(f);
-    if (x509 == NULL)
+    if (x509 == nullptr)
     {
         // Error while attempting to read public key!
         throw exception();
     }
 
     key = X509_get_pubkey(x509);
-    if (key == NULL)
+    if (key == nullptr)
     {
         // Cannot get public key from X509!
         throw exception();
@@ -114,7 +114,7 @@ PublicKey::getEmail()
     string rval;
     STACK_OF(OPENSSL_STRING) *email;
 
-    assert(x509 != NULL);
+    assert(x509 != nullptr);
 
     email = X509_get1_email(x509);
     rval = sk_OPENSSL_STRING_value(email, 0);
@@ -130,7 +130,7 @@ PublicKey::computeDigest()
     unsigned int n;
     unsigned char md[EVP_MAX_MD_SIZE];
 
-    assert(x509 != NULL);
+    assert(x509 != nullptr);
 
     if (!X509_digest(x509, EVP_sha1(), md, &n))
     {
@@ -157,7 +157,7 @@ PublicKey::verify(const string &blob,
       return false;
     }
 
-    assert(x509 != NULL && key != NULL);
+    assert(x509 != nullptr && key != nullptr);
 
     EVP_VerifyInit(ctx, EVP_sha256());
     EVP_VerifyUpdate(ctx, blob.data(), blob.size());
@@ -178,7 +178,7 @@ PublicKey::verify(const string &blob,
 }
 
 PrivateKey::PrivateKey()
-    : key(NULL)
+    : key(nullptr)
 {
 }
 
@@ -192,11 +192,11 @@ void
 PrivateKey::open(const string &keyfile)
 {
     FILE *f = fopen(keyfile.c_str(), "r");
-    if (f == NULL)
+    if (f == nullptr)
         throw exception();
-    key = PEM_read_PrivateKey(f, NULL, NULL, NULL);
+    key = PEM_read_PrivateKey(f, nullptr, nullptr, nullptr);
     fclose(f);
-    if (key == NULL)
+    if (key == nullptr)
     {
         ERR_print_errors_fp(stderr);
         throw exception();
@@ -241,14 +241,14 @@ Key_GetType(const string &keyfile)
     EVP_PKEY *key;
     X509 *x509;
     FILE *f = fopen(keyfile.c_str(), "r");
-    if (f == NULL)
+    if (f == nullptr)
     {
         // File open failed
         return KeyType::Invalid;
     }
 
-    key = PEM_read_PrivateKey(f, NULL, NULL, NULL);
-    if (key != NULL) {
+    key = PEM_read_PrivateKey(f, nullptr, nullptr, nullptr);
+    if (key != nullptr) {
         fclose(f);
         EVP_PKEY_free(key);
         return KeyType::Private;
@@ -256,16 +256,16 @@ Key_GetType(const string &keyfile)
 
     rewind(f);
 
-    x509 = PEM_read_X509(f, NULL, NULL, NULL);
+    x509 = PEM_read_X509(f, nullptr, nullptr, nullptr);
     fclose(f);
-    if (x509 == NULL)
+    if (x509 == nullptr)
     {
         // Error while attempting to read public key!
         return KeyType::Invalid;
     }
 
     key = X509_get_pubkey(x509);
-    if (key != NULL)
+    if (key != nullptr)
     {
         return KeyType::Public;
     }

@@ -52,7 +52,7 @@ public:
     void open(const std::string &filename);
     void sync();
     /// rewrites the log file, optionally with new counts
-    void rewrite(const RefcountMap *refs = NULL, const MetadataMap *data = NULL);
+    void rewrite(const RefcountMap *refs = nullptr, const MetadataMap *data = nullptr);
 
     void addRef(const ObjectHash &hash, MdTransaction::sp trs =
             MdTransaction::sp());

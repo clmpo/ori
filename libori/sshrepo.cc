@@ -43,7 +43,7 @@ using namespace std;
  */
 
 SshRepo::SshRepo(SshClient *client)
-    : client(client), containedObjs(NULL)
+    : client(client), containedObjs(nullptr)
 {
 }
 
@@ -159,7 +159,7 @@ SshRepo::getObjects(const ObjectHashVec &objs)
     if (ok) {
         return bs.release();
     }
-    return NULL;
+    return nullptr;
 }
 
 ObjectInfo
@@ -270,7 +270,7 @@ void SshRepo::_clearPayload(const ObjectHash &id)
 SshObject::SshObject(SshRepo *repo, ObjectInfo info)
     : Object(info), repo(repo)
 {
-    ASSERT(repo != NULL);
+    ASSERT(repo != nullptr);
     ASSERT(!info.hash.isEmpty());
 }
 

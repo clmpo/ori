@@ -258,7 +258,7 @@ main(int argc, char *argv[])
     idx = lookupcmd(argv[1]);
     if (idx == -1) {
         printf("Unknown command '%s'\n", argv[1]);
-        cmd_help(0, NULL);
+        cmd_help(0, nullptr);
         return 1;
     }
 

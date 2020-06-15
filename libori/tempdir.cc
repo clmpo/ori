@@ -153,7 +153,7 @@ TempDir::getObject(const ObjectHash &objId)
 bytestream *
 TempDir::getObjects(const ObjectHashVec &vec) {
     NOT_IMPLEMENTED(false);
-    return NULL;
+    return nullptr;
 }
 
 ObjectInfo

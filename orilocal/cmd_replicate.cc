@@ -65,13 +65,13 @@ cmd_replicate(int argc, char * const argv[])
     bool bareRepo = true;
 
     struct option longopts[] = {
-        { "full",       no_argument,    NULL,   'f' },
-        { "shallow",    no_argument,    NULL,   's' },
-        { "non-bare",   no_argument,    NULL,   'n' },
-        { NULL,         0,              NULL,   0   }
+        { "full",       no_argument,    nullptr,   'f' },
+        { "shallow",    no_argument,    nullptr,   's' },
+        { "non-bare",   no_argument,    nullptr,   'n' },
+        { nullptr,         0,           nullptr,   0   }
     };
 
-    while ((ch = getopt_long(argc, argv, "fs", longopts, NULL)) != -1) {
+    while ((ch = getopt_long(argc, argv, "fs", longopts, nullptr)) != -1) {
         switch (ch) {
             case 'f':
                 if (clone_mode != 0) {

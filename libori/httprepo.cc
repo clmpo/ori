@@ -47,7 +47,7 @@ using namespace std;
  */
 
 HttpRepo::HttpRepo(HttpClient *client)
-    : client(client), containedObjs(NULL)
+    : client(client), containedObjs(nullptr)
 {
 }
 
@@ -222,7 +222,7 @@ HttpRepo::getObjects(const ObjectHashVec &vec) {
     if (status == 0) {
         return bs.release();
     }
-    return NULL;
+    return nullptr;
 }
 
 std::set<ObjectInfo>
@@ -310,7 +310,7 @@ HttpRepo::_clearPayload(const ObjectHash &id)
 HttpObject::HttpObject(HttpRepo *repo, ObjectInfo info)
     : Object(info), repo(repo)
 {
-    ASSERT(repo != NULL);
+    ASSERT(repo != nullptr);
     ASSERT(!info.hash.isEmpty());
 }
 
