@@ -255,8 +255,9 @@ LargeBlob::read(uint8_t *buf, size_t s, off_t off) const
     std::map<uint64_t, LBlobEntry>::const_iterator it;
     // XXX: Using upper/lower_bound should be faster
 
-    for (it = parts.begin(); it != parts.end(); it++) {
-        if ((*it).first <= off && ((*it).first + (*it).second.length) > off)
+    for (it = parts.begin(); it != parts.end(); ++it) {
+        if (static_cast<off_t>((*it).first) <= off && 
+            static_cast<off_t>(((*it).first + (*it).second.length)) > off)
             break;
     }
 
