@@ -254,7 +254,7 @@ ori_rename(const char *from_path, const char *to_path)
         }
 
         // Not sure if FUSE checks for these two error cases
-        if (toFile != NULL && toFile->isDir()) {
+        if (toFile != nullptr && toFile->isDir()) {
             toFileDir = priv->getDir(to_path);
 
             if (!toFileDir->isEmpty())

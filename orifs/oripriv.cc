@@ -331,7 +331,7 @@ OriPriv::getFileInfo(uint64_t fh)
 
     ASSERT(false);
 
-    return NULL;
+    return nullptr;
 }
 
 int
@@ -564,7 +564,7 @@ OriPriv::rename(const std::string &fromPath, const std::string &toPath)
     OriDir *fromDir;
     OriDir *toDir;
     OriFileInfo *info = getFileInfo(fromPath);
-    OriFileInfo *toFile = NULL;
+    OriFileInfo *toFile = nullptr;
 
     fromParent = OriFile_Dirname(fromPath);
     if (fromParent.empty())
@@ -599,7 +599,7 @@ OriPriv::rename(const std::string &fromPath, const std::string &toPath)
     toDir->add(to, info->id);
 
     // Delete previously present file
-    if (toFile != NULL) {
+    if (toFile != nullptr) {
         toFile->release();
     }
 
@@ -1184,7 +1184,7 @@ OriPriv::checkout(ObjectHash hash, bool force)
                 OriFileInfo *myInfo = diffInfo[filePath];
                 OriDir *parentDir = getDir(parentPath);
 
-                if (newInfo == NULL) {
+                if (newInfo == nullptr) {
                     // File was deleted
                     myInfo->release();
                 } else if (newInfo->hash != myInfo->hash) {
@@ -1395,7 +1395,7 @@ OriPriv::merge(ObjectHash hash)
             OriDir *parentDir = getDir(OriFile_Dirname(e.filepath));
             OriFileInfo *info = getFileInfo(e.filepath);
 
-            ASSERT(info != NULL);
+            ASSERT(info != nullptr);
 
             if (info->path != "") {
                 // XXX: Attempt automerge
@@ -1540,8 +1540,8 @@ OriPrivCheckDir(OriPriv *priv, const std::string &path, OriDir *dir)
     OriDir::iterator it;
 
     for (it = dir->begin(); it != dir->end(); it++) {
-        OriFileInfo *info = NULL;
         const std::string objPath = path + "/" + it->first;
+        OriFileInfo *info = nullptr;
 
         try {
             info = priv->getFileInfo(objPath);
@@ -1605,8 +1605,8 @@ OriPriv::fsck()
 
     for (it = paths.begin(); it != paths.end(); it++) {
         string parentPath = OriFile_Dirname(it->first);
-        OriDir *dir = NULL;
         const std::string basename = OriFile_Basename(it->first);
+        OriDir *dir = nullptr;
 
         if (it->first == "/")
             continue;
