@@ -757,6 +757,11 @@ OriPriv::listSnapshots()
 Commit
 OriPriv::lookupSnapshot(const std::string &name)
 {    
+    if(!repo)
+    {
+        WARNING("lookupSnapshot %s with no repo", name.c_str());
+        return Commit();
+    }
     const ObjectHash hash = repo->lookupSnapshot(name);
     return repo->getCommit(hash);
 }
