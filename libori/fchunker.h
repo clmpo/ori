@@ -47,8 +47,8 @@ void FChunker<chunk_size>::chunk(ChunkerCB *cb)
 {
     uint8_t *in = NULL;
     uint64_t len = 0;
-    register uint64_t off = 0;
-    register uint64_t start = 0;
+    uint64_t off = 0;
+    uint64_t start = 0;
 
     if (cb->load(&in, &len, &off) == 0) {
         assert(false);
