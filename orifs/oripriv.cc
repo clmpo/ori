@@ -539,10 +539,9 @@ void
 OriPriv::unlink(const std::string &path)
 {
     OriFileInfo *info = getFileInfo(path);
-    string parentPath;
     OriDir *parentDir;
 
-    parentPath = OriFile_Dirname(path);
+    std::string parentPath = OriFile_Dirname(path);
     if (parentPath.empty())
         parentPath = "/";
 
@@ -560,16 +559,15 @@ OriPriv::unlink(const std::string &path)
 void
 OriPriv::rename(const std::string &fromPath, const std::string &toPath)
 {
-    string fromParent, toParent;
     OriDir *fromDir;
     OriDir *toDir;
     OriFileInfo *info = getFileInfo(fromPath);
     OriFileInfo *toFile = nullptr;
 
-    fromParent = OriFile_Dirname(fromPath);
+    std::string fromParent = OriFile_Dirname(fromPath);
     if (fromParent.empty())
         fromParent = "/";
-    toParent = OriFile_Dirname(toPath);
+    std::string toParent = OriFile_Dirname(toPath);
     if (toParent.empty())
         toParent = "/";
 
@@ -611,12 +609,11 @@ OriFileInfo *
 OriPriv::addDir(const std::string &path)
 {
     OriFileInfo *info;
-    string parentPath;
     OriDir *parentDir;
     OriFileInfo *parentInfo;
     const time_t now = time(nullptr);
 
-    parentPath = OriFile_Dirname(path);
+    std::string parentPath = OriFile_Dirname(path);
     if (parentPath.empty())
         parentPath = "/";
 
@@ -662,11 +659,10 @@ OriPriv::rmDir(const std::string &path)
 {
     OriDir *dir = getDir(path);
     OriFileInfo *info = getFileInfo(path);
-    string parentPath;
     OriDir *parentDir;
     OriFileInfo *parentInfo;
 
-    parentPath = OriFile_Dirname(path);
+    std::string parentPath = OriFile_Dirname(path);
     if (parentPath == "")
         parentPath = "/";
 
@@ -776,15 +772,14 @@ OriPriv::listSnapshots()
 }
 
 Commit
-OriPriv::lookupSnapshot(const string &name)
-{
-
+OriPriv::lookupSnapshot(const std::string &name)
+{    
     const ObjectHash hash = repo->lookupSnapshot(name);
     return repo->getCommit(hash);
 }
 
 Tree
-OriPriv::getTree(const Commit &c, const string &path)
+OriPriv::getTree(const Commit &c, const std::string &path)
 {
     const ObjectHash hash = repo->lookup(c, path);
     return repo->getTree(hash);
@@ -801,7 +796,7 @@ OriPriv::getTip()
 }
 
 ObjectHash
-OriPriv::commitTreeHelper(const string &path)
+OriPriv::commitTreeHelper(const std::string &path)
 {
     ObjectHash hash = ObjectHash();
     OriDir *dir = getDir(path.empty() ? "/" : path);
@@ -976,21 +971,21 @@ OriPriv::getDiffHelper(const std::string &path,
 
         if (info->type == FILETYPE_DIRTY) {
             if (t.find(it->first) == t.end())
-                diff->insert(make_pair(objPath, OriFileState::Created));
+                diff->insert(std::make_pair(objPath, OriFileState::Created));
             else
-                diff->insert(make_pair(objPath, OriFileState::Modified));
+                diff->insert(std::make_pair(objPath, OriFileState::Modified));
         }
     }
     for (Tree::iterator it = t.begin(); it != t.end(); it++) {
-        string objPath = path + "/" + it->first;
+        std::string objPath = path + "/" + it->first;
 
         if (dir->find(it->first) == dir->end())
-            diff->insert(make_pair(objPath, OriFileState::Deleted));
+            diff->insert(std::make_pair(objPath, OriFileState::Deleted));
     }
 
     // Check subdirectories
     for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
-        string objPath = path + "/" + it->first;
+        std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
         if (info->isDir() && info->dirLoaded) {
@@ -1037,13 +1032,13 @@ OriPriv::getCheckoutHelper(const std::string &path,
 
         if (info->type == FILETYPE_DIRTY) {
             if (t.find(it->first) == t.end()) {
-                diffState->insert(make_pair(objPath, OriFileState::Created));
+                diffState->insert(std::make_pair(objPath, OriFileState::Created));
                 info->retain();
-                diffInfo->insert(make_pair(objPath, info));
+                diffInfo->insert(std::make_pair(objPath, info));
             } else {
-                diffState->insert(make_pair(objPath, OriFileState::Modified));
+                diffState->insert(std::make_pair(objPath, OriFileState::Modified));
                 info->retain();
-                diffInfo->insert(make_pair(objPath, info));
+                diffInfo->insert(std::make_pair(objPath, info));
             }
         }
     }
@@ -1051,7 +1046,7 @@ OriPriv::getCheckoutHelper(const std::string &path,
         const std::string objPath = path + "/" + it->first;
 
         if (dir->find(it->first) == dir->end()) {
-            diffState->insert(make_pair(objPath, OriFileState::Deleted));
+            diffState->insert(std::make_pair(objPath, OriFileState::Deleted));
         }
     }
 
@@ -1076,10 +1071,10 @@ OriPriv::checkout(ObjectHash hash, bool force)
     getCheckoutHelper("", &diffInfo, &diffState);
 
     // Store a set of directories containing changes
+    std::set<std::string> modifiedDirs;
     map<string, OriFileState::StateType>::iterator it;
-    set<string> modifiedDirs;
     for (it = diffState.begin(); it != diffState.end(); it++) {
-        string base = OriFile_Dirname(it->first);
+        std::string base = OriFile_Dirname(it->first);
 
         if (base.empty())
             base = "/";
@@ -1088,8 +1083,8 @@ OriPriv::checkout(ObjectHash hash, bool force)
     }
 
     // Reset
+    std::map<OriPrivId, OriDir*>::iterator dit;
     map<string, OriFileInfo*>::iterator pit;
-    map<OriPrivId, OriDir*>::iterator dit;
     for (pit = paths.begin(); pit != paths.end(); pit++)
     {
         if (pit->first == "/") {
@@ -1135,8 +1130,8 @@ OriPriv::checkout(ObjectHash hash, bool force)
 
     // Merge files (unless force specified)
     for (it = diffState.begin(); it != diffState.end(); it++) {
-        string filePath = it->first;
-        string parentPath = OriFile_Dirname(filePath);
+        std::string filePath = it->first;
+        std::string parentPath = OriFile_Dirname(filePath);
 
         if (parentPath.empty())
             parentPath = "/";
@@ -1514,12 +1509,11 @@ void
 OriPriv::journal(const std::string &event, const std::string &arg)
 {
     int len;
-    string buf;
 
     if (journalMode == OriJournalMode::NoJournal)
         return;
 
-    buf = event + ":" + arg + "\n";
+    const std::string buf = event + ":" + arg + "\n";
     len = write(journalFd, buf.c_str(), buf.size());
     if (len < 0 || len != (int)buf.size())
         throw SystemException();
@@ -1604,8 +1598,8 @@ OriPriv::fsck()
     OriPrivCheckDir(this, "", dir);
 
     for (it = paths.begin(); it != paths.end(); it++) {
-        string parentPath = OriFile_Dirname(it->first);
         const std::string basename = OriFile_Basename(it->first);
+        std::string parentPath = OriFile_Dirname(it->first);
         OriDir *dir = nullptr;
 
         if (it->first == "/")

@@ -256,7 +256,7 @@ LocalRepo::open(const string &root)
     // Open snapshot index
     try {
         snapshots.open(rootPath + ORI_PATH_SNAPSHOTS); // throws SystemException
-    } catch (exception &e) {
+    } catch (const std::exception &e) {
         index.close();
         throw e;
     }
@@ -265,7 +265,7 @@ LocalRepo::open(const string &root)
     try {
         metadata.open(rootPath + ORI_PATH_METADATA); // throws SystemException
         vars.open(rootPath + ORI_PATH_VARLINK); // throws SystemException
-    } catch (exception &e) {
+    } catch (const std::exception &e) {
         index.close();
         snapshots.close();
         throw e;
@@ -814,7 +814,7 @@ LocalRepo::rebuildIndex()
 
     index.open(indexPath);
 
-    vector<packid_t> pfIds = packfiles->getPackfileList();
+    std::vector<packid_t> pfIds = packfiles->getPackfileList();
     vector<packid_t>::iterator it;
 
     for (it = pfIds.begin(); it != pfIds.end(); it++)
