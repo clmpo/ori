@@ -92,7 +92,7 @@ std::string ObjectHash::hex() const
     // Convert into string.
     for (size_t i = 0; i < SIZE; i++)
     {
-	rval << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
+        rval << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];
     }
 
     return rval.str();
