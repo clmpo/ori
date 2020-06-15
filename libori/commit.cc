@@ -39,7 +39,7 @@
 
 Commit::Commit()
     : version(0), flags(0), message(), treeObjId(), user(),
-      snapshotName(), date(0), signature(""), graftRepo(),
+      snapshotName(), date(0), graftRepo(),
       graftPath(), graftCommitId()
 {
     version = COMMIT_VERSION;
