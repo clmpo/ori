@@ -514,7 +514,7 @@ OriPriv::readFile(OriFileInfo *info, char *buf, size_t size, off_t offset)
         // XXX: Cache
 
         ssize_t total = 0;
-        while (total < size) {
+        while (total < static_cast<ssize_t>(size)) {
             const ssize_t res = lb.read((uint8_t*)(buf + total),
                                  size - total,
                                  offset + total);
