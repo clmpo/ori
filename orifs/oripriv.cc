@@ -400,7 +400,7 @@ OriPriv::addFile(const std::string &path)
     info->fd = file.second;
 
     // Delete any old temporary files
-    map<string, OriFileInfo*>::iterator it = paths.find(path);
+    auto it = paths.find(path);
     if (it != paths.end()) {
         ASSERT(!it->second->isDir());
         it->second->release();
@@ -682,16 +682,13 @@ OriDir*
 OriPriv::getDir(const std::string &path)
 {
     // Check pending directories
-    map<string, OriFileInfo*>::iterator it;
-
-    it = paths.find(path);
+    const auto it = paths.find(path);
     if (it != paths.end()) {
-        map<OriPrivId, OriDir*>::iterator dit;
         if (!(*it).second->isDir())
             throw SystemException(ENOTDIR);
         if ((*it).second->type == FILETYPE_NULL)
             throw SystemException(ENOENT);
-        dit = dirs.find((*it).second->id);
+        const auto dit = dirs.find((*it).second->id);
         if (dit == dirs.end())
             goto loadDir;
 
@@ -703,12 +700,11 @@ loadDir:
     const ObjectHash hash = repo->lookup(headCommit, path);
     if (!hash.isEmpty()) {
         Tree t = repo->getTree(hash);
-        Tree::iterator it;
         OriDir *dir = new OriDir();
 
         OriFileInfo *dirInfo = getFileInfo(path);
 
-        for (it = t.begin(); it != t.end(); it++) {
+        for (auto it = t.begin(); it != t.end(); ++it) {
             OriFileInfo *info = new OriFileInfo();
             AttrMap *attrs = &it->second.attrs;
             bool isSymlink = false;
@@ -810,7 +806,7 @@ OriPriv::commitTreeHelper(const std::string &path)
     }
 
     // Check this directory
-    for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
+    for (auto it = dir->begin(); it != dir->end(); ++it) {
         const std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
@@ -855,7 +851,7 @@ OriPriv::commitTreeHelper(const std::string &path)
 
             info->type = FILETYPE_COMMITTED;
         } else {
-            Tree::iterator oldEntry = oldTree.find(it->first);
+            const auto oldEntry = oldTree.find(it->first);
 
             ASSERT(oldEntry != oldTree.end());
             ASSERT(oldEntry->second.hasBasicAttrs());
@@ -865,7 +861,7 @@ OriPriv::commitTreeHelper(const std::string &path)
             newTree.tree[it->first] = oldEntry->second;
         }
     }
-    for (Tree::iterator it = oldTree.begin(); it != oldTree.end(); it++) {
+    for (auto it = oldTree.begin(); it != oldTree.end(); ++it) {
         const std::string objPath = path + "/" + it->first;
 
         if (dir->find(it->first) == dir->end()) {
@@ -875,7 +871,7 @@ OriPriv::commitTreeHelper(const std::string &path)
     }
 
     // Check subdirectories
-    for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
+    for (auto it = dir->begin(); it != dir->end(); ++it) {
         const std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
@@ -951,7 +947,7 @@ OriPriv::getDiffHelper(const std::string &path,
     }
 
     // Check this directory
-    for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
+    for (auto it = dir->begin(); it != dir->end(); ++it) {
         const std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
@@ -962,7 +958,7 @@ OriPriv::getDiffHelper(const std::string &path,
                 diff->insert(std::make_pair(objPath, OriFileState::Modified));
         }
     }
-    for (Tree::iterator it = t.begin(); it != t.end(); it++) {
+    for (auto it = t.begin(); it != t.end(); ++it) {
         std::string objPath = path + "/" + it->first;
 
         if (dir->find(it->first) == dir->end())
@@ -970,7 +966,7 @@ OriPriv::getDiffHelper(const std::string &path,
     }
 
     // Check subdirectories
-    for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
+    for (auto it = dir->begin(); it != dir->end(); ++it) {
         std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
@@ -1012,7 +1008,7 @@ OriPriv::getCheckoutHelper(const std::string &path,
     }
 
     // Check this directory
-    for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
+    for (auto it = dir->begin(); it != dir->end(); ++it) {
         const std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
@@ -1028,7 +1024,7 @@ OriPriv::getCheckoutHelper(const std::string &path,
             }
         }
     }
-    for (Tree::iterator it = t.begin(); it != t.end(); it++) {
+    for (auto it = t.begin(); it != t.end(); ++it) {
         const std::string objPath = path + "/" + it->first;
 
         if (dir->find(it->first) == dir->end()) {
@@ -1037,7 +1033,7 @@ OriPriv::getCheckoutHelper(const std::string &path,
     }
 
     // Check subdirectories
-    for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
+    for (auto it = dir->begin(); it != dir->end(); ++it) {
         const std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
@@ -1058,8 +1054,7 @@ OriPriv::checkout(ObjectHash hash, bool force)
 
     // Store a set of directories containing changes
     std::set<std::string> modifiedDirs;
-    map<string, OriFileState::StateType>::iterator it;
-    for (it = diffState.begin(); it != diffState.end(); it++) {
+    for (auto it = diffState.begin(); it != diffState.end(); ++it) {
         std::string base = OriFile_Dirname(it->first);
 
         if (base.empty())
@@ -1070,8 +1065,8 @@ OriPriv::checkout(ObjectHash hash, bool force)
 
     // Reset
     std::map<OriPrivId, OriDir*>::iterator dit;
-    map<string, OriFileInfo*>::iterator pit;
-    for (pit = paths.begin(); pit != paths.end(); pit++)
+    auto pit = paths.begin();
+    for (; pit != paths.end(); ++pit)
     {
         if (pit->first == "/") {
             if (pit->second->dirLoaded)
@@ -1109,13 +1104,12 @@ OriPriv::checkout(ObjectHash hash, bool force)
     // Compute diff to detect conflicts
 
     // getDir for current dirs
-    set<string>::iterator mdit;
-    for (mdit = modifiedDirs.begin(); mdit != modifiedDirs.end(); mdit++) {
+    for (auto mdit = modifiedDirs.begin(); mdit != modifiedDirs.end(); ++mdit) {
         getDir(*mdit);
     }
 
     // Merge files (unless force specified)
-    for (it = diffState.begin(); it != diffState.end(); it++) {
+    for (auto it = diffState.begin(); it != diffState.end(); ++it) {
         std::string filePath = it->first;
         std::string parentPath = OriFile_Dirname(filePath);
 
@@ -1515,9 +1509,7 @@ OriPriv::journal(const std::string &event, const std::string &arg)
 void
 OriPrivCheckDir(OriPriv *priv, const std::string &path, OriDir *dir)
 {
-    OriDir::iterator it;
-
-    for (it = dir->begin(); it != dir->end(); it++) {
+    for (auto it = dir->begin(); it != dir->end(); ++it) {
         const std::string objPath = path + "/" + it->first;
         OriFileInfo *info = nullptr;
 
@@ -1572,14 +1564,11 @@ void
 OriPriv::fsck()
 {
     RWKey::sp lock = nsLock.writeLock();
-    map<string, OriFileInfo *>::iterator it;
-
-
     OriDir *dir = getDir("/");
 
     OriPrivCheckDir(this, "", dir);
 
-    for (it = paths.begin(); it != paths.end(); it++) {
+    for (auto it = paths.begin(); it != paths.end(); ++it) {
         const std::string basename = OriFile_Basename(it->first);
         std::string parentPath = OriFile_Dirname(it->first);
         OriDir *dir = nullptr;
@@ -1598,7 +1587,7 @@ OriPriv::fsck()
         }
 
         if (dir) {
-            OriDir::iterator dirIt = dir->find(basename);
+            auto dirIt = dir->find(basename);
 
             if (dirIt == dir->end()) {
                 FUSE_LOG("fsck: %s not present in directory!",

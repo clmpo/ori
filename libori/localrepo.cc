@@ -815,9 +815,8 @@ LocalRepo::rebuildIndex()
     index.open(indexPath);
 
     std::vector<packid_t> pfIds = packfiles->getPackfileList();
-    vector<packid_t>::iterator it;
 
-    for (it = pfIds.begin(); it != pfIds.end(); it++)
+    for (auto it = pfIds.begin(); it != pfIds.end(); ++it)
     {
         RebuildIndexStruct ris;
         Packfile::sp pf = packfiles->getPackfile(*it);
@@ -867,9 +866,7 @@ LocalRepo::listCommits()
 
     // TODO: more efficient
     std::set<ObjectInfo> objs = listObjects();
-    for (set<ObjectInfo>::iterator it = objs.begin();
-            it != objs.end();
-            it++) {
+    for (auto it = objs.begin(); it != objs.end(); ++it) {
         const ObjectInfo &oi = *it;
         if (oi.type == ObjectInfo::Commit) {
             const Commit &c = getCommit(oi.hash);

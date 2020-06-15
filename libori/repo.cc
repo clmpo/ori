@@ -251,12 +251,11 @@ Repo::lookup(const Commit &c, const std::string &path)
         return ObjectHash();
 
     for (size_t i = 0; i < pv.size(); i++) {
-	map<string, TreeEntry>::iterator e;
         Tree t = getTree(objId);
-	e = t.tree.find(pv[i]);
-	if (e == t.tree.end()) {
-	    return ObjectHash();
-	}
+        const auto e = t.tree.find(pv[i]);
+        if (e == t.tree.end()) {
+            return ObjectHash();
+        }
         objId = t.tree[pv[i]].hash;
     }
 

@@ -417,7 +417,7 @@ ori_read(const char *path, char *buf, size_t size, off_t offset,
         Tree t = priv->getTree(c, parentPath);
 
         // lookup tree
-        Tree::iterator it = t.find(fileName);
+        const auto it = t.find(fileName);
         if (it == t.end())
             return -ENOENT;
 
