@@ -79,7 +79,8 @@ class LocalRepo : public Repo
 {
 public:
     explicit LocalRepo(const std::string &root = "");
-    ~LocalRepo();
+    virtual ~LocalRepo() override;
+    
     void open(const std::string &root = "");
     void close();
     LocalRepoLock::sp lock();
@@ -105,15 +106,15 @@ public:
     bool hasRemote();
 
     // Repo implementation
-    int distance() { return 0; }
-    Object::sp getObject(const ObjectHash &id);
-    ObjectInfo getObjectInfo(const ObjectHash &objId);
-    bool hasObject(const ObjectHash &objId);
+    int distance() override { return 0; }
+    Object::sp getObject(const ObjectHash &id) override ;
+    ObjectInfo getObjectInfo(const ObjectHash &objId) override ;
+    bool hasObject(const ObjectHash &objId) override ;
     bool isObjectStored(const ObjectHash &objId);
     //std::set<ObjectInfo> slowListObjects();
-    std::set<ObjectInfo> listObjects();
+    std::set<ObjectInfo> listObjects() override;
     int addObject(ObjectType type, const ObjectHash &hash,
-            const std::string &payload);
+            const std::string &payload) override;
 
     void sync(); /// sync all changes to disk
 
@@ -124,7 +125,7 @@ public:
 
     LocalObject::sp getLocalObject(const ObjectHash &objId);
     
-    std::vector<Commit> listCommits();
+    std::vector<Commit> listCommits() override;
     std::map<std::string, ObjectHash> listSnapshots();
     ObjectHash lookupSnapshot(const std::string &name);
 
@@ -143,9 +144,9 @@ public:
     // Clone/pull operations
     void pull(Repo *r);
     void multiPull(RemoteRepo::sp defaultRemote);
-    void transmit(bytewstream *bs, const std::vector<ObjectHash> &objs);
-    void receive(bytestream *bs);
-    bytestream *getObjects(const std::vector<ObjectHash> &objs);
+    void transmit(bytewstream *bs, const std::vector<ObjectHash> &objs) override;
+    void receive(bytestream *bs) override;
+    bytestream *getObjects(const std::vector<ObjectHash> &objs) override;
 
     // Commit-related operations
     void addLargeBlobBackrefs(const LargeBlob &lb, MdTransaction::sp tr);

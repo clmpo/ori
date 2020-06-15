@@ -128,7 +128,7 @@ public:
 
         return 0;
     }
-    virtual void match(const uint8_t *b, uint32_t l)
+    virtual void match(const uint8_t *b, uint32_t l) override
     {
         // Add the fragment into the repository
         // XXX: Journal for cleanup!
@@ -140,7 +140,7 @@ public:
         lb->parts.insert(make_pair(lbOff, LBlobEntry(hash, l)));
         lbOff += l;
     }
-    virtual int load(uint8_t **b, uint64_t *l, uint64_t *o)
+    virtual int load(uint8_t **b, uint64_t *l, uint64_t *o) override
     {
         if (*b == nullptr)
             *b = buf;
