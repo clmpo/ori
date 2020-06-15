@@ -213,7 +213,7 @@ ori_readlink(const char *path, char *buf, size_t size)
         return -e.getErrno();
     }
 
-    memcpy(buf, info->link.c_str(), MIN(info->link.length() + 1, size));
+    memcpy(buf, info->link.c_str(), std::min(info->link.length() + 1, size));
 
     return 0;
 }

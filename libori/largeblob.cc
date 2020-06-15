@@ -284,7 +284,7 @@ LargeBlob::read(uint8_t *buf, size_t s, off_t off) const
         return -EIO;
     }
 
-    size_t to_read = MIN((size_t)left, s);
+    const size_t to_read = std::min((size_t)left, s);
 
     Object::sp o(repo->getObject((*it).second.hash));
     ASSERT(o->getInfo().type == ObjectInfo::Blob);
