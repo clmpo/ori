@@ -210,7 +210,7 @@ LocalRepo::~LocalRepo()
 int
 LocalRepo_PeerHelper(LocalRepo *l, const std::string &path)
 {
-    Peer p = Peer(path);
+    const Peer p = Peer(path);
 
     std::string name = path;
     name = name.substr(name.find_last_of("/") + 1);
@@ -235,7 +235,7 @@ LocalRepo::open(const string &root)
 
     try {
         // Read UUID
-        std::string uuid_path = rootPath + ORI_PATH_UUID;
+        const std::string uuid_path = rootPath + ORI_PATH_UUID;
         id = OriFile_ReadFile(uuid_path);
 
         // Read Version
@@ -323,7 +323,7 @@ LocalRepo::lock()
     char pnum_str[64];
     sprintf(pnum_str, "%u", getpid());
 
-    int rval = symlink(pnum_str, lfPath.c_str());
+    const int rval = symlink(pnum_str, lfPath.c_str());
     if (rval < 0) {
         if (errno == EEXIST) {
             ssize_t n = readlink(lfPath.c_str(), pnum_str, 63);
@@ -915,7 +915,7 @@ LocalRepo::pull(Repo *r)
     deque<Commit> newCommits;
 
     for (size_t i = 0; i < remoteCommits.size(); i++) {
-        ObjectHash hash = remoteCommits[i].hash();
+        const ObjectHash hash = remoteCommits[i].hash();
         if (!hasObject(hash)) {
             toPull.push_back(hash);
 

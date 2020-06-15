@@ -107,7 +107,7 @@ void
 SshServer::serve() {
     fdstream fs(STDIN_FILENO, -1);
 
-    uint8_t respOK = OK;
+    const uint8_t respOK = OK;
     write(STDOUT_FILENO, &respOK, 1);
     fsync(STDOUT_FILENO);
     fflush(stdout);

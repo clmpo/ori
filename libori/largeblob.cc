@@ -161,10 +161,8 @@ public:
             *o = 32;
         }
 
-        uint64_t toRead = MIN(bufLen - *l, fileLen - fileOff);
-        int status;
-
-        status = read(srcFd, buf + *l, toRead);
+        const uint64_t toRead = MIN(bufLen - *l, fileLen - fileOff);
+        const int status = read(srcFd, buf + *l, toRead);
         if (status < 0) {
             perror("Cannot read large file");
             PANIC();
@@ -194,7 +192,6 @@ private:
 void
 LargeBlob::chunkFile(const string &path)
 {
-    int status;
     FileChunkerCB cb = FileChunkerCB(this);
 #ifdef ORI_USE_RK
     RKChunker<4096, 2048, 8192> c = RKChunker<4096, 2048, 8192>();
@@ -205,7 +202,7 @@ LargeBlob::chunkFile(const string &path)
     FChunker<32*1024> c = FChunker<32*1024>();
 #endif /* ORI_USE_FIXED */
 
-    status = cb.open(path);
+    const int status = cb.open(path);
     if (status < 0) {
         perror("Cannot open large file for chunking");
         PANIC();
@@ -220,10 +217,9 @@ LargeBlob::chunkFile(const string &path)
 void
 LargeBlob::extractFile(const std::string &path)
 {
-    int fd;
     std::map<uint64_t, LBlobEntry>::iterator it;
 
-    fd = ::open(path.c_str(), O_WRONLY | O_CREAT | O_TRUNC,
+    const int fd = ::open(path.c_str(), O_WRONLY | O_CREAT | O_TRUNC,
                 S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
     if (fd < 0) {
         perror("Cannot open file for writing");
@@ -233,13 +229,11 @@ LargeBlob::extractFile(const std::string &path)
 
     for (it = parts.begin(); it != parts.end(); it++)
     {
-        int status;
-
         Object::sp o(repo->getObject((*it).second.hash));
         const std::string tmp = o->getPayload();
         ASSERT(tmp.length() == (*it).second.length);
 
-        status = ::write(fd, tmp.data(), tmp.length());
+        const int status = ::write(fd, tmp.data(), tmp.length());
         if (status < 0) {
             perror("write to large object failed");
             PANIC();
@@ -271,7 +265,7 @@ LargeBlob::read(uint8_t *buf, size_t s, off_t off) const
         return 0;
     }
 
-    off_t part_off = off - (*it).first;
+    const off_t part_off = off - (*it).first;
     if (part_off >= (*it).second.length) {
         LOG("offset %" PRIu64 " larger than last blob in LB", off);
         ASSERT(false);
@@ -283,7 +277,7 @@ LargeBlob::read(uint8_t *buf, size_t s, off_t off) const
         return -EIO;
     }
 
-    int left = (*it).second.length - part_off;
+    const int left = (*it).second.length - part_off;
     if (left <= 0) {
         LOG("incorrect computation of left! (%d)", left);
         ASSERT(false);
@@ -306,7 +300,7 @@ LargeBlob::getBlob()
     strwstream ss;
     ss.writeHash(totalHash);
 
-    size_t num = parts.size();
+    const size_t num = parts.size();
     ss.writeUInt64(num);
 
     for (auto &it : parts) {
@@ -323,13 +317,13 @@ LargeBlob::fromBlob(const string &blob)
     strstream ss(blob);
     ss.readHash(totalHash);
 
-    size_t num = ss.readUInt64();
+    const size_t num = ss.readUInt64();
 
     uint64_t off = 0;
     for (size_t i = 0; i < num; i++) {
         ObjectHash hash;
         ss.readHash(hash);
-        size_t length = ss.readUInt16();
+        const size_t length = ss.readUInt16();
 
         parts.insert(make_pair(off, LBlobEntry(hash, length)));
 

@@ -241,7 +241,7 @@ Commit::fromBlob(const std::string &blob)
     }
 
     ss.readHash(treeObjId);
-    uint8_t numParents = ss.readUInt8();
+    const uint8_t numParents = ss.readUInt8();
     if (numParents == 2) {
         ss.readHash(parents.first);
         ss.readHash(parents.second);
@@ -273,7 +273,7 @@ ObjectHash
 Commit::hash() const
 {
     const std::string &blob = getBlob();
-    ObjectHash h = OriCrypt_HashString(blob);
+    const ObjectHash h = OriCrypt_HashString(blob);
     /*fprintf(stderr, "Commit blob len %lu, hash %s\n", blob.size(),
             h.hex().c_str());
     OriDebug_PrintHex(blob);*/

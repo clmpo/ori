@@ -66,7 +66,7 @@ cmd_setkey(int argc, char * const argv[])
         return 1;
     }
 
-    status = OriFile_Copy(argv[1], rootPath + ORI_PATH_PRIVATEKEY);
+    const int status = OriFile_Copy(argv[1], rootPath + ORI_PATH_PRIVATEKEY);
     if (status < 0)
     {
         std::cout << "Failed to copy the private key into the repository." << std::endl;

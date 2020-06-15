@@ -255,11 +255,10 @@ OriPriv::getTemp()
 {
     const std::string filePath = tmpDir + "/obj.XXXXXX";
     char tmpPath[PATH_MAX];
-    int fd;
 
     strncpy(tmpPath, filePath.c_str(), PATH_MAX);
 
-    fd = mkstemp(tmpPath);
+    const int fd = mkstemp(tmpPath);
     if (fd < 0)
         throw SystemException(errno);
 
@@ -273,7 +272,7 @@ OriPriv::getTemp()
 uint64_t
 OriPriv::generateFH()
 {
-    uint64_t fh = nextFH;
+    const uint64_t fh = nextFH;
 
     nextFH++;
 
@@ -283,7 +282,7 @@ OriPriv::generateFH()
 OriPrivId
 OriPriv::generateId()
 {
-    OriPrivId id = nextId;
+    const OriPrivId id = nextId;
 
     nextId++;
 
@@ -424,7 +423,7 @@ std::pair<OriFileInfo *, uint64_t>
 OriPriv::openFile(const std::string &path, bool writing, bool trunc)
 {
     OriFileInfo *info = getFileInfo(path);
-    uint64_t handle = generateFH();
+    const uint64_t handle = generateFH();
 
     // XXX: Need to release and remove the hanlde during a failure!
 
@@ -444,7 +443,7 @@ OriPriv::openFile(const std::string &path, bool writing, bool trunc)
             // File is already open just return a new handle
             return std::make_pair(info, handle);
         }
-        int status = open(info->path.c_str(), O_RDWR);
+        const int status = open(info->path.c_str(), O_RDWR);
         if (status < 0) {
             ASSERT(false); // XXX: Need to release the handle
             throw SystemException(errno);
@@ -467,7 +466,6 @@ OriPriv::openFile(const std::string &path, bool writing, bool trunc)
             info->fd = temp.second;
         } else if (writing) {
             // Copy file
-            int status;
             const std::pair<std::string, int> temp = getTemp();
             close(temp.second);
 
@@ -476,7 +474,7 @@ OriPriv::openFile(const std::string &path, bool writing, bool trunc)
                 throw SystemException(EIO);
             }
 
-            status = open(temp.first.c_str(), O_RDWR);
+            const int status = open(temp.first.c_str(), O_RDWR);
             if (status < 0) {
                 ASSERT(false); // XXX: Need to release the handle
                 throw SystemException(errno);
@@ -501,7 +499,7 @@ OriPriv::readFile(OriFileInfo *info, char *buf, size_t size, off_t offset)
 {
     ASSERT(!info->hash.isEmpty());
 
-    ObjectType type = repo->getObjectType(info->hash);
+    const ObjectType type = repo->getObjectType(info->hash);
     if (type == ObjectInfo::Blob) {
         const std::string payload = repo->getPayload(info->hash);
         // XXX: Cache
@@ -509,7 +507,7 @@ OriPriv::readFile(OriFileInfo *info, char *buf, size_t size, off_t offset)
         size_t left = payload.size() - offset;
         if (left > payload.size())
             left = 0;
-        size_t real_read = min(size, left);
+        const size_t real_read = std::min(size, left);
 
         memcpy(buf, payload.data() + offset, real_read);
 
@@ -521,7 +519,7 @@ OriPriv::readFile(OriFileInfo *info, char *buf, size_t size, off_t offset)
 
         ssize_t total = 0;
         while (total < size) {
-            ssize_t res = lb.read((uint8_t*)(buf + total),
+            const ssize_t res = lb.read((uint8_t*)(buf + total),
                                  size - total,
                                  offset + total);
             if (res == 0)
@@ -616,7 +614,7 @@ OriPriv::addDir(const std::string &path)
     string parentPath;
     OriDir *parentDir;
     OriFileInfo *parentInfo;
-    time_t now = time(NULL);
+    const time_t now = time(nullptr);
 
     parentPath = OriFile_Dirname(path);
     if (parentPath == "")
@@ -780,16 +778,15 @@ OriPriv::listSnapshots()
 Commit
 OriPriv::lookupSnapshot(const string &name)
 {
-    ObjectHash hash = repo->lookupSnapshot(name);
 
+    const ObjectHash hash = repo->lookupSnapshot(name);
     return repo->getCommit(hash);
 }
 
 Tree
 OriPriv::getTree(const Commit &c, const string &path)
 {
-    ObjectHash hash = repo->lookup(c, path);
-
+    const ObjectHash hash = repo->lookup(c, path);
     return repo->getTree(hash);
 }
 
@@ -833,7 +830,7 @@ OriPriv::commitTreeHelper(const string &path)
 
     // Check this directory
     for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
-        string objPath = path + "/" + it->first;
+        const std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
         if (info->type == FILETYPE_DIRTY) {
@@ -889,7 +886,7 @@ OriPriv::commitTreeHelper(const string &path)
         }
     }
     for (Tree::iterator it = oldTree.begin(); it != oldTree.end(); it++) {
-        string objPath = path + "/" + it->first;
+        const std::string objPath = path + "/" + it->first;
 
         if (dir->find(it->first) == dir->end()) {
             dirty = true;
@@ -899,7 +896,7 @@ OriPriv::commitTreeHelper(const string &path)
 
     // Check subdirectories
     for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
-        string objPath = path + "/" + it->first;
+        const std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
         if (info->isDir() && info->dirLoaded) {
@@ -933,7 +930,7 @@ ObjectHash
 OriPriv::commit(const Commit &cTemplate, bool temporary)
 {
     Commit c;
-    ObjectHash root = commitTreeHelper("");
+    const ObjectHash root = commitTreeHelper("");
     ObjectHash commitHash = ObjectHash();
 
     if (root.isEmpty() || root == headCommit.getTree())
@@ -975,7 +972,7 @@ OriPriv::getDiffHelper(const std::string &path,
 
     // Check this directory
     for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
-        string objPath = path + "/" + it->first;
+        const std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
         if (info->type == FILETYPE_DIRTY) {
@@ -1037,7 +1034,7 @@ OriPriv::getCheckoutHelper(const std::string &path,
 
     // Check this directory
     for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
-        string objPath = path + "/" + it->first;
+        const std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
         if (info->type == FILETYPE_DIRTY) {
@@ -1053,7 +1050,7 @@ OriPriv::getCheckoutHelper(const std::string &path,
         }
     }
     for (Tree::iterator it = t.begin(); it != t.end(); it++) {
-        string objPath = path + "/" + it->first;
+        const std::string objPath = path + "/" + it->first;
 
         if (dir->find(it->first) == dir->end()) {
             diffState->insert(make_pair(objPath, OriFileState::Deleted));
@@ -1062,7 +1059,7 @@ OriPriv::getCheckoutHelper(const std::string &path,
 
     // Check subdirectories
     for (OriDir::iterator it = dir->begin(); it != dir->end(); it++) {
-        string objPath = path + "/" + it->first;
+        const std::string objPath = path + "/" + it->first;
         OriFileInfo *info = getFileInfo(objPath);
 
         if (info->isDir() && info->dirLoaded) {
@@ -1545,8 +1542,8 @@ OriPrivCheckDir(OriPriv *priv, const std::string &path, OriDir *dir)
     OriDir::iterator it;
 
     for (it = dir->begin(); it != dir->end(); it++) {
-        string objPath = path + "/" + it->first;
         OriFileInfo *info = NULL;
+        const std::string objPath = path + "/" + it->first;
 
         try {
             info = priv->getFileInfo(objPath);
@@ -1609,9 +1606,9 @@ OriPriv::fsck()
     OriPrivCheckDir(this, "", dir);
 
     for (it = paths.begin(); it != paths.end(); it++) {
-        string basename = OriFile_Basename(it->first);
         string parentPath = OriFile_Dirname(it->first);
         OriDir *dir = NULL;
+        const std::string basename = OriFile_Basename(it->first);
 
         if (it->first == "/")
             continue;
