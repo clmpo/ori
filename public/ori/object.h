@@ -31,8 +31,8 @@ class Object {
 public:
     using sp = std::shared_ptr<Object>;
 
-    Object() {}
-    Object(const ObjectInfo &info) : info(info) {}
+    Object() = default;
+    explicit Object(const ObjectInfo &info) : info(info) {}
     virtual ~Object() {}
 
     virtual const ObjectInfo &getInfo() const { return info; }

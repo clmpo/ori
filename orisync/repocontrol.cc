@@ -32,10 +32,6 @@ RepoControl::RepoControl(const string &path)
 {
 }
 
-RepoControl::~RepoControl()
-{
-}
-
 void
 RepoControl::open()
 {

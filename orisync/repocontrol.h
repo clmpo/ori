@@ -26,8 +26,8 @@
 
 class RepoControl {
 public:
-    RepoControl(const std::string &path);
-    ~RepoControl();
+    explicit RepoControl(const std::string &path);
+
     void open();
     void close();
     std::string getPath();
