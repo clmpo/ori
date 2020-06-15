@@ -29,7 +29,7 @@
 
 class Object {
 public:
-    typedef std::shared_ptr<Object> sp;
+    using sp = std::shared_ptr<Object>;
 
     Object() {}
     Object(const ObjectInfo &info) : info(info) {}
