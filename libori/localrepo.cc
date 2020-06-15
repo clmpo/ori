@@ -890,11 +890,10 @@ LocalRepo::listSnapshots()
 ObjectHash
 LocalRepo::lookupSnapshot(const std::string &name)
 {
-    map<string, ObjectHash> snaps = snapshots.getList();
-    map<string, ObjectHash>::iterator it = snaps.find(name);
-
+    const auto snaps = snapshots.getList();
+    const auto it = snaps.find(name);
     if (it != snaps.end())
-	return (*it).second;
+        return (*it).second;
 
     return ObjectHash();
 }

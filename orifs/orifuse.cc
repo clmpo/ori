@@ -128,7 +128,7 @@ ori_unlink(const char *path)
 
     RWKey::sp lock = priv->nsLock.writeLock();
     try {
-        OriFileInfo *info = priv->getFileInfo(path);
+        const OriFileInfo *info = priv->getFileInfo(path);
 
         if (info->isDir())
             return -EPERM;

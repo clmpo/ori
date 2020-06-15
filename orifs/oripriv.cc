@@ -292,8 +292,6 @@ OriPriv::generateId()
 OriFileInfo *
 OriPriv::getFileInfo(const std::string &path)
 {
-    map<string, OriFileInfo*>::iterator it;
-
     // Must call getDir to make sure it is loaded
     if (path != "/") {
         std::string parentPath = OriFile_Dirname(path);
@@ -304,7 +302,7 @@ OriPriv::getFileInfo(const std::string &path)
     }
 
     // Check pending directories
-    it = paths.find(path);
+    const auto it = paths.find(path);
     if (it != paths.end()) {
         OriFileInfo *info = (*it).second;
 
@@ -322,9 +320,7 @@ OriPriv::getFileInfo(const std::string &path)
 OriFileInfo *
 OriPriv::getFileInfo(uint64_t fh)
 {
-    unordered_map<uint64_t, OriFileInfo*>::iterator it;
-
-    it = handles.find(fh);
+    const auto it = handles.find(fh);
     if (it != handles.end()) {
         return (*it).second;
     }
@@ -712,7 +708,7 @@ OriPriv::getDir(const std::string &path)
 
 loadDir:
     // Check repository
-    ObjectHash hash = repo->lookup(headCommit, path);
+    const ObjectHash hash = repo->lookup(headCommit, path);
     if (!hash.isEmpty()) {
         Tree t = repo->getTree(hash);
         Tree::iterator it;
@@ -1508,13 +1504,11 @@ OriPriv::setJournalMode(OriJournalMode::JournalMode mode)
 void
 OriPriv::journal(const std::string &event, const std::string &arg)
 {
-    int len;
-
     if (journalMode == OriJournalMode::NoJournal)
         return;
 
     const std::string buf = event + ":" + arg + "\n";
-    len = write(journalFd, buf.c_str(), buf.size());
+    const int len = write(journalFd, buf.c_str(), buf.size());
     if (len < 0 || len != (int)buf.size())
         throw SystemException();
 
