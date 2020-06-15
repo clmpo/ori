@@ -52,7 +52,7 @@ ObjectHash ObjectHash::fromHex(std::string hex)
     std::transform(hex.begin(), hex.end(), hex.begin(), ::tolower);
 
     char hash[SIZE];
-    for (size_t i = 0; i < SIZE; i++) {
+    for (size_t i = 0; i < SIZE; ++i) {
         hash[i] = hexdigit(hex[i*2]) * 16 + hexdigit(hex[i*2+1]);
     }
 
@@ -78,7 +78,7 @@ void ObjectHash::clear()
 
 bool ObjectHash::isEmpty() const
 {
-    for (size_t i = 0; i < SIZE; i++) {
+    for (size_t i = 0; i < SIZE; ++i) {
         if (hash[i] != 0)
             return false;
     }
