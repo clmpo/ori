@@ -32,7 +32,7 @@ cmd_setkey(int argc, char * const argv[])
     int status;
     const std::string rootPath = LocalRepo::findRootPath();
 
-    if (rootPath == "") {
+    if (rootPath.empty()) {
         std::cout << "No repository found!" << std::endl;
         return 1;
     }

@@ -451,7 +451,7 @@ LocalRepo::createObjDirs(const ObjectHash &objId)
     std::string path = rootPath;
     const std::string hexId = objId.hex();
 
-    ASSERT(path != "");
+    ASSERT(!path.empty());
 
     path += ORI_PATH_OBJS;
     path += hexId.substr(0,2);

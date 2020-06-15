@@ -185,7 +185,7 @@ Repo::getCommit(const ObjectHash &commitId)
     ASSERT(commitId == EMPTYFILE_HASH || o->getInfo().type == ObjectInfo::Commit);
 
     Commit c;
-    if (blob.size() == 0) {
+    if (blob.empty()) {
         printf("Error getting commit blob\n");
         PANIC();
         return c;
@@ -248,8 +248,8 @@ Repo::lookup(const Commit &c, const std::string &path)
     if (path == "/")
         return objId;
 
-    if (pv.size() == 0)
-	return ObjectHash();
+    if (pv.empty())
+        return ObjectHash();
 
     for (size_t i = 0; i < pv.size(); i++) {
 	map<string, TreeEntry>::iterator e;

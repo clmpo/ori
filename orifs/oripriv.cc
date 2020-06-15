@@ -297,7 +297,7 @@ OriPriv::getFileInfo(const std::string &path)
     // Must call getDir to make sure it is loaded
     if (path != "/") {
         std::string parentPath = OriFile_Dirname(path);
-        if (parentPath == "")
+        if (parentPath.empty())
             parentPath = "/";
 
         getDir(parentPath);
@@ -543,7 +543,7 @@ OriPriv::unlink(const std::string &path)
     OriDir *parentDir;
 
     parentPath = OriFile_Dirname(path);
-    if (parentPath == "")
+    if (parentPath.empty())
         parentPath = "/";
 
     parentDir = getDir(parentPath);
@@ -567,10 +567,10 @@ OriPriv::rename(const std::string &fromPath, const std::string &toPath)
     OriFileInfo *toFile = NULL;
 
     fromParent = OriFile_Dirname(fromPath);
-    if (fromParent == "")
+    if (fromParent.empty())
         fromParent = "/";
     toParent = OriFile_Dirname(toPath);
-    if (toParent == "")
+    if (toParent.empty())
         toParent = "/";
 
     fromDir = getDir(fromParent);
@@ -617,7 +617,7 @@ OriPriv::addDir(const std::string &path)
     const time_t now = time(nullptr);
 
     parentPath = OriFile_Dirname(path);
-    if (parentPath == "")
+    if (parentPath.empty())
         parentPath = "/";
 
     /*
@@ -804,7 +804,7 @@ ObjectHash
 OriPriv::commitTreeHelper(const string &path)
 {
     ObjectHash hash = ObjectHash();
-    OriDir *dir = getDir(path == "" ? "/" : path);
+    OriDir *dir = getDir(path.empty() ? "/" : path);
     Tree oldTree = Tree();
     Tree newTree;
     bool dirty = false;
@@ -816,8 +816,7 @@ OriPriv::commitTreeHelper(const string &path)
          * throws a runtime_error depending on a few corner cases when the 
          * directory does not exist.
          */
-        ObjectHash treeHash = repo->lookup(headCommit,
-                                           path == "" ? "/" : path);
+        ObjectHash treeHash = repo->lookup(headCommit, path.empty() ? "/" : path);
         if (!treeHash.isEmpty()) {
             oldTree = repo->getTree(treeHash);
         } else {
@@ -847,7 +846,7 @@ OriPriv::commitTreeHelper(const string &path)
 
                 e = TreeEntry(hash, ObjectHash());
             } else {
-                if (info->path != "") {
+                if (!info->path.empty()) {
                     pair<ObjectHash, ObjectHash> hashes;
                     hashes = repo->addFile(info->path);
 
@@ -954,7 +953,7 @@ void
 OriPriv::getDiffHelper(const std::string &path,
                        std::map<std::string, OriFileState::StateType> *diff)
 {
-    OriDir *dir = getDir(path == "" ? "/" : path);
+    OriDir *dir = getDir(path.empty() ? "/" : path);
     Tree t;
 
     // Load repo directory
@@ -1015,14 +1014,13 @@ OriPriv::getCheckoutHelper(const std::string &path,
                            std::map<std::string, OriFileInfo *> *diffInfo,
                            std::map<std::string, OriFileState::StateType> *diffState)
 {
-    OriDir *dir = getDir(path == "" ? "/" : path);
+    OriDir *dir = getDir(path.empty() ? "/" : path);
     Tree t;
 
     // Load repo directory
     // XXX: This function needs to return all new objects in current diff
     try {
-        ObjectHash treeHash = repo->lookup(headCommit,
-                                           path == "" ? "/" : path);
+        ObjectHash treeHash = repo->lookup(headCommit, path.empty() ? "/" : path);
         if (treeHash.isEmpty())
             return;
 
@@ -1083,7 +1081,7 @@ OriPriv::checkout(ObjectHash hash, bool force)
     for (it = diffState.begin(); it != diffState.end(); it++) {
         string base = OriFile_Dirname(it->first);
 
-        if (base == "")
+        if (base.empty())
             base = "/";
 
         modifiedDirs.insert(base);
@@ -1140,7 +1138,7 @@ OriPriv::checkout(ObjectHash hash, bool force)
         string filePath = it->first;
         string parentPath = OriFile_Dirname(filePath);
 
-        if (parentPath == "")
+        if (parentPath.empty())
             parentPath = "/";
 
         switch (it->second) {
@@ -1613,7 +1611,7 @@ OriPriv::fsck()
         if (it->first == "/")
             continue;
 
-        if (parentPath == "")
+        if (parentPath.empty())
             parentPath = "/";
 
         try {

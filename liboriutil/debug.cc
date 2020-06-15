@@ -222,7 +222,7 @@ void ori_sighandler(int signum)
 }
 
 int ori_open_log(const std::string &logPath) {
-    if (logPath == "")
+    if (logPath.empty())
         return -1;
 
     set_terminate(ori_terminate);

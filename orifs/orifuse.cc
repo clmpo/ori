@@ -134,7 +134,7 @@ ori_unlink(const char *path)
             return -EPERM;
 
         // Remove temporary file
-        if (info->path != "")
+        if (!info->path.empty())
             unlink(info->path.c_str());
 
         if (info->isReg() || info->isSymlink()) {
@@ -165,7 +165,7 @@ ori_symlink(const char *target_path, const char *link_path)
     FUSE_LOG("FUSE ori_symlink(path=\"%s\")", link_path);
 
     std::string parentPath = OriFile_Dirname(link_path);
-    if (parentPath == "")
+    if (parentPath.empty())
         parentPath = "/";
 
     if (strcmp(link_path, ORI_CONTROL_FILEPATH) == 0) {
@@ -299,7 +299,7 @@ ori_create(const char *path, mode_t mode, struct fuse_file_info *fi)
     FUSE_LOG("FUSE ori_create(path=\"%s\")", path);
 
     std::string parentPath = OriFile_Dirname(path);
-    if (parentPath == "")
+    if (parentPath.empty())
         parentPath = "/";
 
     if (strncmp(path,
@@ -356,7 +356,7 @@ ori_open(const char *path, struct fuse_file_info *fi)
     }
 
     std::string parentPath = OriFile_Dirname(path);
-    if (parentPath == "")
+    if (parentPath.empty())
         parentPath = "/";
 
     RWKey::sp lock = priv->nsLock.writeLock();
@@ -411,7 +411,7 @@ ori_read(const char *path, char *buf, size_t size, off_t offset,
         snapshot = snapshot.substr(0, pos);
         std::string fileName = OriFile_Basename(parentPath);
         parentPath = OriFile_Dirname(parentPath);
-        if (parentPath == "")
+        if (parentPath.empty())
             parentPath = "/";
 
         // XXX: Enforce that this is a valid snapshot & directory path
@@ -864,7 +864,7 @@ ori_chmod(const char *path, mode_t mode)
     OriPriv *priv = GetOriPriv();
 
     std::string parentPath = OriFile_Dirname(path);
-    if (parentPath == "")
+    if (parentPath.empty())
         parentPath = "/";
 
     FUSE_LOG("FUSE ori_chmod(path=\"%s\")", path);
