@@ -93,11 +93,11 @@ Util_PathToVector(const std::string &path)
     while (pos < path.length()) {
         const size_t end = path.find('/', pos);
         if (end == path.npos) {
-            rval.push_back(path.substr(pos));
+            rval.emplace_back(path.substr(pos));
             break;
         }
 
-        rval.push_back(path.substr(pos, end - pos));
+        rval.emplace_back(path.substr(pos, end - pos));
         pos = end + 1;
     }
 

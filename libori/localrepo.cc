@@ -873,7 +873,7 @@ LocalRepo::listCommits()
         const ObjectInfo &oi = *it;
         if (oi.type == ObjectInfo::Commit) {
             const Commit &c = getCommit(oi.hash);
-            rval.push_back(c);
+            rval.emplace_back(c);
         }
     }
 
