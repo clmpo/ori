@@ -143,7 +143,7 @@ ori_unlink(const char *path)
             // XXX: Support files
             ASSERT(false);
         }
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         return -e.getErrno();
     }
 
@@ -180,7 +180,7 @@ ori_symlink(const char *target_path, const char *link_path)
     RWKey::sp lock = priv->nsLock.writeLock();
     try {
         parentDir = priv->getDir(parentPath);
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         return -e.getErrno();
     }
 
@@ -210,7 +210,7 @@ ori_readlink(const char *path, char *buf, size_t size)
     RWKey::sp lock = priv->nsLock.readLock();
     try {
         info = priv->getFileInfo(path);
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         return -e.getErrno();
     }
 
@@ -250,7 +250,7 @@ ori_rename(const char *from_path, const char *to_path)
 
         try {
             toFile = priv->getFileInfo(to_path);
-        } catch (SystemException e) {
+        } catch (const SystemException& e) {
             // Fall through
         }
 
@@ -313,7 +313,7 @@ ori_create(const char *path, mode_t mode, struct fuse_file_info *fi)
     RWKey::sp lock = priv->nsLock.writeLock();
     try {
         parentDir = priv->getDir(parentPath);
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         return -e.getErrno();
     }
 
@@ -366,7 +366,7 @@ ori_open(const char *path, struct fuse_file_info *fi)
     try {
         parentDir = priv->getDir(parentPath);
         info = priv->openFile(path, /*writing*/writing, /*trunc*/trunc);
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         return -e.getErrno();
     }
 
@@ -616,7 +616,7 @@ ori_mkdir(const char *path, mode_t mode)
     try {
         OriFileInfo *info = priv->addDir(path);
         info->statInfo.st_mode |= mode;
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         return -e.getErrno();
     }
 
@@ -736,7 +736,7 @@ ori_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
     RWKey::sp lock = priv->nsLock.writeLock();
     try {
         dir = priv->getDir(path);
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         return -e.getErrno();
     }
 
@@ -746,7 +746,7 @@ ori_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
         try {
             info = priv->getFileInfo(dirPath + (*it).first);
             filler(buf, (*it).first.c_str(), &info->statInfo, 0);
-        } catch (SystemException e) {
+        } catch (const SystemException& e) {
             FUSE_LOG("Unexpected %s", e.what());
             filler(buf, (*it).first.c_str(), NULL, 0);
         }
@@ -855,7 +855,7 @@ ori_getattr(const char *path, struct stat *stbuf)
     try {
         OriFileInfo *info = priv->getFileInfo(path);
         *stbuf = info->statInfo;
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         return -e.getErrno();
     }
 
@@ -891,7 +891,7 @@ ori_chmod(const char *path, mode_t mode)
 
         OriDir *dir = priv->getDir(parentPath);
         dir->setDirty();
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         return -e.getErrno();
     }
 
@@ -928,7 +928,7 @@ ori_chown(const char *path, uid_t uid, gid_t gid)
 
         OriDir *dir = priv->getDir(parentPath);
         dir->setDirty();
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         return -e.getErrno();
     }
 
@@ -965,7 +965,7 @@ ori_utimens(const char *path, const struct timespec tv[2])
 
         OriDir *dir = priv->getDir(parentPath);
         dir->setDirty();
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         return -e.getErrno();
     }
 
@@ -1320,7 +1320,7 @@ main(int argc, char *argv[])
         } else {
             priv = new OriPriv(config.repoPath);
         }
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         FUSE_LOG("Unexpected %s", e.what());
         fuse_opt_free_args(&args);
         throw e;

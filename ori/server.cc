@@ -64,7 +64,7 @@ SshServer::open(const string &path)
         udsClient->connect();
         repo = new UDSRepo(udsClient);
         return;
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         // XXX: fall through
     }
 

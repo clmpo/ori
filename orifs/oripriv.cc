@@ -131,8 +131,8 @@ OriPriv::OriPriv(const std::string &repoPath,
         repo->open();
         if (ori_open_log(repo->getLogPath()) < 0)
             printf("Couldn't open log!\n");
-    } catch (exception &e) {
-        cout << e.what() << endl;
+    } catch (const std::exception &e) {
+        std::cout << e.what() << std::endl;
         printf("Failed to open ori repository please check the path!\n");
         exit(1);
     }
@@ -582,7 +582,7 @@ OriPriv::rename(const string &fromPath, const string &toPath)
 
     try {
         toFile = getFileInfo(toPath);
-    } catch (SystemException &e) {
+    } catch (const SystemException &e) {
         // Fall through
     }
 
@@ -828,7 +828,7 @@ OriPriv::commitTreeHelper(const string &path)
         } else {
             dirty = true;
         }
-    } catch (runtime_error &e) {
+    } catch (const std::runtime_error &e) {
         // Directory does not exist
         dirty = true;
     }
@@ -970,7 +970,7 @@ OriPriv::getDiffHelper(const string &path,
             return;
 
         t = repo->getTree(treeHash);
-    } catch (runtime_error &e) {
+    } catch (const std::runtime_error &e) {
         // Directory does not exist
         return;
     }
@@ -1032,7 +1032,7 @@ OriPriv::getCheckoutHelper(const string &path,
             return;
 
         t = repo->getTree(treeHash);
-    } catch (runtime_error &e) {
+    } catch (std::runtime_error &e) {
         // Directory does not exist
         return;
     }
@@ -1552,7 +1552,7 @@ OriPrivCheckDir(OriPriv *priv, const string &path, OriDir *dir)
 
         try {
             info = priv->getFileInfo(objPath);
-        } catch (SystemException e) {
+        } catch (const SystemException& e) {
             FUSE_LOG("fsck: getFileInfo(%s) had %s",
                      objPath.c_str(), e.what());
         }
@@ -1565,7 +1565,7 @@ OriPrivCheckDir(OriPriv *priv, const string &path, OriDir *dir)
             try {
                 dir = priv->getDir(objPath);
                 OriPrivCheckDir(priv, objPath, dir);
-            } catch (SystemException e) {
+            } catch (const SystemException& e) {
                 FUSE_LOG("fsck: getDir(%s) encountered %s",
                          objPath.c_str(), e.what());
             }
@@ -1623,7 +1623,7 @@ OriPriv::fsck()
 
         try {
             dir = getDir(parentPath);
-        } catch (SystemException e) {
+        } catch (const SystemException& e) {
             FUSE_LOG("fsck: %s path encountered an error %s",
                      it->first.c_str(), e.what());
         }

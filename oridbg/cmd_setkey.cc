@@ -62,7 +62,7 @@ cmd_setkey(int argc, char * const argv[])
     PrivateKey priv = PrivateKey();
     try {
         priv.open(argv[1]);
-    } catch (exception e) {
+    } catch (const std::exception& e) {
 	cout << "It appears that the key is invalid." << endl;
 	return 1;
     }

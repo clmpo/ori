@@ -286,7 +286,7 @@ public:
 
             // Add or update hostinfo
             updateHost(kv, srcip);
-        } catch(SerializationException e) {
+        } catch(const SerializationException& e) {
             LOG("Error encountered parsing announcement: %s", e.what());
             return;
         }

@@ -43,7 +43,7 @@ RepoControl::open()
         udsClient = new UDSClient(path);
         udsClient->connect();
         udsRepo = new UDSRepo(udsClient);
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         if (udsRepo)
             delete udsRepo;
         udsRepo = NULL;
@@ -54,7 +54,7 @@ RepoControl::open()
      try {
       localRepo = new LocalRepo();
       localRepo->open(path);
-     } catch (exception e) {
+     } catch (const std::exception& e) {
         if (localRepo)
             delete localRepo;
         localRepo = NULL;
@@ -106,7 +106,7 @@ RepoControl::getHead()
     if (udsRepo) {
         try {
             return udsRepo->getHead().hex();
-        } catch (SystemException e) {
+        } catch (const SystemException& e) {
             WARNING("%s", e.what());
             return "";
         }
@@ -144,7 +144,7 @@ RepoControl::checkout(ObjectHash newHead)
         WARNING("Failed to checkout %s", error.c_str());
         return -1;
       }
-    } catch (SystemException e) {
+    } catch (const SystemException& e) {
         WARNING("%s", e.what());
         return -1;
     }
@@ -181,7 +181,7 @@ RepoControl::pull(const string &host, const string &path)
             return "";
           }
           pullResp.readHash(newHead);
-        } catch (SystemException e) {
+        } catch (const SystemException& e) {
           WARNING("%s", e.what());
           return "";
         }
@@ -253,7 +253,7 @@ RepoControl::snapshot()
           default:
             NOT_IMPLEMENTED(false);
         }
-      } catch (SystemException e) {
+      } catch (const SystemException& e) {
         WARNING("%s", e.what());
         return -1;
       }
@@ -309,7 +309,7 @@ RepoControl::gc(time_t time)
 	          default:
     	          NOT_IMPLEMENTED(false);
           }
-        } catch (SystemException e) {
+        } catch (const SystemException& e) {
           WARNING("%s", e.what());
           return;
         }
