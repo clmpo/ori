@@ -157,7 +157,6 @@ ori_symlink(const char *target_path, const char *link_path)
 {
     OriPriv *priv = GetOriPriv();
     OriDir *parentDir;
-    string parentPath;
 
 #ifdef FSCK_A_LOT
     priv->fsck();
@@ -165,7 +164,7 @@ ori_symlink(const char *target_path, const char *link_path)
 
     FUSE_LOG("FUSE ori_symlink(path=\"%s\")", link_path);
 
-    parentPath = OriFile_Dirname(link_path);
+    std::string parentPath = OriFile_Dirname(link_path);
     if (parentPath == "")
         parentPath = "/";
 
@@ -277,7 +276,7 @@ ori_rename(const char *from_path, const char *to_path)
         return -e.getErrno();
     }
 
-    string journalArg = from_path;
+    std::string journalArg = from_path;
     journalArg += ":";
     journalArg += to_path;
     priv->journal("rename", journalArg);
@@ -291,7 +290,6 @@ static int
 ori_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 {
     OriPriv *priv = GetOriPriv();
-    string parentPath;
     OriDir *parentDir;
 
 #ifdef FSCK_A_LOT
@@ -300,7 +298,7 @@ ori_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 
     FUSE_LOG("FUSE ori_create(path=\"%s\")", path);
 
-    parentPath = OriFile_Dirname(path);
+    std::string parentPath = OriFile_Dirname(path);
     if (parentPath == "")
         parentPath = "/";
 
@@ -323,7 +321,7 @@ ori_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 
     parentDir->add(OriFile_Basename(path), info.first->id);
 
-    string journalArg = path;
+    std::string journalArg = path;
     journalArg += ":" + info.first->path;
     priv->journal("create", journalArg);
 
@@ -337,7 +335,6 @@ static int
 ori_open(const char *path, struct fuse_file_info *fi)
 {
     OriPriv *priv = GetOriPriv();
-    string parentPath;
     OriDir *parentDir;
     pair<OriFileInfo *, uint64_t> info;
     bool writing = false;
@@ -358,7 +355,7 @@ ori_open(const char *path, struct fuse_file_info *fi)
         return writing ? -EPERM : 0;
     }
 
-    parentPath = OriFile_Dirname(path);
+    std::string parentPath = OriFile_Dirname(path);
     if (parentPath == "")
         parentPath = "/";
 
@@ -401,7 +398,6 @@ ori_read(const char *path, char *buf, size_t size, off_t offset,
                        ORI_SNAPSHOT_DIRPATH,
                        strlen(ORI_SNAPSHOT_DIRPATH)) == 0) {
         string snapshot = path;
-        string parentPath, fileName;
         size_t pos = 0;
         Commit c;
         Tree t;
@@ -411,9 +407,9 @@ ori_read(const char *path, char *buf, size_t size, off_t offset,
 
         ASSERT(pos != snapshot.npos);
 
-        parentPath = snapshot.substr(pos);
+        std::string parentPath = snapshot.substr(pos);
         snapshot = snapshot.substr(0, pos);
-        fileName = OriFile_Basename(parentPath);
+        std::string fileName = OriFile_Basename(parentPath);
         parentPath = OriFile_Dirname(parentPath);
         if (parentPath == "")
             parentPath = "/";
@@ -866,9 +862,8 @@ static int
 ori_chmod(const char *path, mode_t mode)
 {
     OriPriv *priv = GetOriPriv();
-    string parentPath;
 
-    parentPath = OriFile_Dirname(path);
+    std::string parentPath = OriFile_Dirname(path);
     if (parentPath == "")
         parentPath = "/";
 

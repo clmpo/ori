@@ -180,7 +180,7 @@ Commit
 Repo::getCommit(const ObjectHash &commitId)
 {
     Object::sp o(getObject(commitId));
-    string blob = o->getPayload();
+    std::string blob = o->getPayload();
 
     ASSERT(commitId == EMPTYFILE_HASH || o->getInfo().type == ObjectInfo::Commit);
 
@@ -240,9 +240,9 @@ Repo::getCommitDag()
  * Lookup a path given a Commit and return the object ID.
  */
 ObjectHash
-Repo::lookup(const Commit &c, const string &path)
+Repo::lookup(const Commit &c, const std::string &path)
 {
-    vector<string> pv = Util_PathToVector(path);
+    const std::vector<std::string> pv = Util_PathToVector(path);
     ObjectHash objId = c.getTree();
 
     if (path == "/")

@@ -208,11 +208,11 @@ LocalRepo::~LocalRepo()
 }
 
 int
-LocalRepo_PeerHelper(LocalRepo *l, const string &path)
+LocalRepo_PeerHelper(LocalRepo *l, const std::string &path)
 {
     Peer p = Peer(path);
 
-    string name = path;
+    std::string name = path;
     name = name.substr(name.find_last_of("/") + 1);
 
     // Skip journal files
@@ -273,7 +273,7 @@ LocalRepo::open(const string &root)
     packfiles.reset(new PackfileManager(getRootPath() + ORI_PATH_OBJS));
 
     // Scan for peers
-    string peer_path = rootPath + ORI_PATH_REMOTES;
+    const std::string peer_path = rootPath + ORI_PATH_REMOTES;
     DirIterate(peer_path.c_str(), this, LocalRepo_PeerHelper);
 
     map<string, Peer>::iterator it;
@@ -404,7 +404,7 @@ Object::sp LocalRepo::getObject(const ObjectHash &objId)
 
             if (cacheRemoteObjects) {
                 auto_ptr<bytestream> bs(ro->getPayloadStream());
-                string buf = bs->readAll();
+                const std::string buf = bs->readAll();
                 addBlob(ro->getInfo().type, buf);
 
                 // XXX: Add reference counts
@@ -448,8 +448,8 @@ LocalObject::sp LocalRepo::getLocalObject(const ObjectHash &objId)
 void
 LocalRepo::createObjDirs(const ObjectHash &objId)
 {
-    string path = rootPath;
-    string hexId = objId.hex();
+    std::string path = rootPath;
+    const std::string hexId = objId.hex();
 
     ASSERT(path != "");
 
@@ -807,7 +807,7 @@ rebuildIndexCb(const ObjectInfo &info, offset_t off, void *arg)
 bool
 LocalRepo::rebuildIndex()
 {
-    string indexPath = rootPath + ORI_PATH_INDEX;
+    const std::string indexPath = rootPath + ORI_PATH_INDEX;
     index.close();
 
     OriFile_Delete(indexPath);
@@ -860,13 +860,13 @@ bool _timeCompare(const Commit &c1, const Commit &c2) {
     return c1.getTime() < c2.getTime();
 }
 
-vector<Commit>
+std::vector<Commit>
 LocalRepo::listCommits()
 {
-    vector<Commit> rval;
+    std::vector<Commit> rval;
 
     // TODO: more efficient
-    set<ObjectInfo> objs = listObjects();
+    std::set<ObjectInfo> objs = listObjects();
     for (set<ObjectInfo>::iterator it = objs.begin();
             it != objs.end();
             it++) {
@@ -881,14 +881,14 @@ LocalRepo::listCommits()
     return rval;
 }
 
-map<string, ObjectHash>
+std::map<std::string, ObjectHash>
 LocalRepo::listSnapshots()
 {
     return snapshots.getList();
 }
 
 ObjectHash
-LocalRepo::lookupSnapshot(const string &name)
+LocalRepo::lookupSnapshot(const std::string &name)
 {
     map<string, ObjectHash> snaps = snapshots.getList();
     map<string, ObjectHash>::iterator it = snaps.find(name);

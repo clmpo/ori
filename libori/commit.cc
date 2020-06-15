@@ -29,8 +29,6 @@
 #include <oriutil/stream.h>
 #include <ori/commit.h>
 
-using namespace std;
-
 /********************************************************************
  *
  *
@@ -60,19 +58,19 @@ Commit::setParents(ObjectHash p1, ObjectHash p2)
     parents.second = p2;
 }
 
-pair<ObjectHash, ObjectHash>
+std::pair<ObjectHash, ObjectHash>
 Commit::getParents() const
 {
     return parents;
 }
 
 void
-Commit::setMessage(const string &msg)
+Commit::setMessage(const std::string &msg)
 {
     message = msg;
 }
 
-string
+std::string
 Commit::getMessage() const
 {
     return message;
@@ -91,12 +89,12 @@ Commit::getTree() const
 }
 
 void
-Commit::setUser(const string &user)
+Commit::setUser(const std::string &user)
 {
     this->user = user;
 }
 
-string
+std::string
 Commit::getUser() const
 {
     return user;
@@ -129,7 +127,7 @@ Commit::getTime() const
 void
 Commit::sign(const PrivateKey &key)
 {
-    string blob = getBlob(/* withSignature */false);
+    std::string blob = getBlob(/* withSignature */false);
 
     flags |= COMMIT_FLAG_HAS_SIGNATURE;
     signature = key.sign(blob);
@@ -138,7 +136,7 @@ Commit::sign(const PrivateKey &key)
 bool
 Commit::verify(const PublicKey &key)
 {
-    string blob = getBlob(/* withSignature */false);
+    const std::string blob = getBlob(/* withSignature */false);
 
     if (~flags & COMMIT_FLAG_HAS_SIGNATURE)
         return false;
@@ -153,8 +151,8 @@ Commit::hasSignature()
 }
 
 void
-Commit::setGraft(const string &repo,
-                 const string &path,
+Commit::setGraft(const std::string &repo,
+                 const std::string &path,
                  const ObjectHash &commitId)
 {
     flags |= COMMIT_FLAG_IS_GRAFT;
@@ -163,10 +161,10 @@ Commit::setGraft(const string &repo,
     graftCommitId = commitId;
 }
 
-pair<string, string>
+std::pair<std::string, std::string>
 Commit::getGraftRepo() const
 {
-    return make_pair(graftRepo, graftPath);
+    return std::make_pair(graftRepo, graftPath);
 }
 
 ObjectHash
@@ -175,7 +173,7 @@ Commit::getGraftCommit() const
     return graftCommitId;
 }
 
-string
+std::string
 Commit::getBlob(bool withSignature) const
 {
     strwstream ss;
@@ -227,7 +225,7 @@ Commit::getBlob(bool withSignature) const
 }
 
 void
-Commit::fromBlob(const string &blob)
+Commit::fromBlob(const std::string &blob)
 {
     strstream ss(blob);
 
@@ -237,8 +235,8 @@ Commit::fromBlob(const string &blob)
     flags = ss.readUInt32();
 
     if (version > COMMIT_VERSION) {
-        cout << "Unsupported Commit object version: " << hex << setw(8)
-             << setfill('0') << version << endl;
+        std::cout << "Unsupported Commit object version: " << std::hex << std::setw(8)
+             << std::setfill('0') << version << std::endl;
         NOT_IMPLEMENTED(false);
     }
 
@@ -290,27 +288,27 @@ Commit::print() const
 
     ctime_r(&timeVal, timeStr);
 
-    cout << "Version: 0x" << hex << setw(8) << setfill('0') << version << endl;
-    cout << "Flags: 0x" << hex << setw(8) << setfill('0') << flags << endl;
-    cout << "Parents: "
+    std::cout << "Version: 0x" << std::hex << std::setw(8) << std::setfill('0') << version << std::endl;
+    std::cout << "Flags: 0x" << std::hex << std::setw(8) << std::setfill('0') << flags << std::endl;
+    std::cout << "Parents: "
          << (parents.first.isEmpty() ? "" : parents.first.hex())
          << " "
-         << (parents.second.isEmpty() ? "" : parents.second.hex()) << endl;
-    cout << "Tree:    " << treeObjId.hex() << endl;
-    cout << "Author:  " << user << endl;
-    cout << "Date:    " << timeStr;
+         << (parents.second.isEmpty() ? "" : parents.second.hex()) << std::endl;
+    std::cout << "Tree:    " << treeObjId.hex() << std::endl;
+    std::cout << "Author:  " << user << std::endl;
+    std::cout << "Date:    " << timeStr;
     if (flags & COMMIT_FLAG_HAS_SIGNATURE) {
-        cout << "Signature: ";
+        std::cout << "Signature: ";
         OriDebug_PrintHex(signature.data(), 0, signature.length());
-        cout << endl;
+        std::cout << std::endl;
     }
     if (!graftCommitId.isEmpty()) {
-        cout << "Graft Repo: " << graftRepo << endl;
-        cout << "Graft Path: " << graftPath << endl;
-        cout << "Graft Commit: " << graftCommitId.hex() << endl;
+        std::cout << "Graft Repo: " << graftRepo << std::endl;
+        std::cout << "Graft Path: " << graftPath << std::endl;
+        std::cout << "Graft Commit: " << graftCommitId.hex() << std::endl;
     }
-    cout << "----- BEGIN MESSAGE -----" << endl;
-    cout << message << endl;
-    cout << "----- END MESSAGE -----" << endl;
+    std::cout << "----- BEGIN MESSAGE -----" << std::endl;
+    std::cout << message << std::endl;
+    std::cout << "----- END MESSAGE -----" << std::endl;
 }
 

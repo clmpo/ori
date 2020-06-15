@@ -24,35 +24,33 @@
 #include <oriutil/key.h>
 #include <ori/localrepo.h>
 
-using namespace std;
-
 extern LocalRepo repository;
 
 int
 cmd_setkey(int argc, char * const argv[])
 {
     int status;
-    string rootPath = LocalRepo::findRootPath();
+    const std::string rootPath = LocalRepo::findRootPath();
 
     if (rootPath == "") {
-        cout << "No repository found!" << endl;
+        std::cout << "No repository found!" << std::endl;
         return 1;
     }
 
     if (argc != 2)
     {
-	cout << "Specify the path to your private key." << endl;
-	cout << "usage: ori setkey <private_key>" << endl;
+        std::cout << "Specify the path to your private key." << std::endl;
+        std::cout << "usage: ori setkey <private_key>" << std::endl;
     }
 
     switch (Key_GetType(argv[1]))
     {
 	case KeyType::Invalid:
-	    cout << "File not found or invalid key." << endl;
+	    std::cout << "File not found or invalid key." << std::endl;
 	    return 1;
 	case KeyType::Public:
-	    cout << "This appears to be a private key please specify a public key."
-		 << endl;
+	    std::cout << "This appears to be a private key please specify a public key."
+		 << std::endl;
 	    return 1;
 	case KeyType::Private:
 	default:
@@ -64,14 +62,14 @@ cmd_setkey(int argc, char * const argv[])
         priv.open(argv[1]);
     } catch (const std::exception& e) 
     {
-	cout << "It appears that the key is invalid." << endl;
-	return 1;
+        std::cout << "It appears that the key is invalid." << std::endl;
+        return 1;
     }
 
     status = OriFile_Copy(argv[1], rootPath + ORI_PATH_PRIVATEKEY);
     if (status < 0)
     {
-	cout << "Failed to copy the private key into the repository." << endl;
+        std::cout << "Failed to copy the private key into the repository." << std::endl;
     }
 
     return 0;

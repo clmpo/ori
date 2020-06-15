@@ -221,7 +221,7 @@ void ori_sighandler(int signum)
     abort();
 }
 
-int ori_open_log(const string &logPath) {
+int ori_open_log(const std::string &logPath) {
     if (logPath == "")
         return -1;
 

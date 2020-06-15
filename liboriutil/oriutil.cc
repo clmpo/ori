@@ -81,11 +81,11 @@ Util_IsValidName(const string &path)
     return true;
 }
 
-vector<string>
-Util_PathToVector(const string &path)
+std::vector<std::string>
+Util_PathToVector(const std::string &path)
 {
     size_t pos = 0;
-    vector<string> rval;
+    std::vector<std::string> rval;
 
     if (path[0] == '/')
         pos = 1;
@@ -104,7 +104,7 @@ Util_PathToVector(const string &path)
     return rval;
 }
 
-string
+std::string
 Util_GetFullname()
 {
     struct passwd *pw = getpwuid(getuid());
@@ -113,12 +113,12 @@ Util_GetFullname()
     ASSERT(pw != nullptr);
 
     if (pw->pw_gecos != nullptr)
-        return string(pw->pw_gecos);
+        return std::string(pw->pw_gecos);
     else
         return "";
 }
 
-string
+std::string
 Util_GetHome()
 {
     char *path;

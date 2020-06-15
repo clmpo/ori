@@ -218,10 +218,10 @@ LargeBlob::chunkFile(const string &path)
 }
 
 void
-LargeBlob::extractFile(const string &path)
+LargeBlob::extractFile(const std::string &path)
 {
     int fd;
-    map<uint64_t, LBlobEntry>::iterator it;
+    std::map<uint64_t, LBlobEntry>::iterator it;
 
     fd = ::open(path.c_str(), O_WRONLY | O_CREAT | O_TRUNC,
                 S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH);
@@ -234,10 +234,9 @@ LargeBlob::extractFile(const string &path)
     for (it = parts.begin(); it != parts.end(); it++)
     {
         int status;
-        string tmp;
 
         Object::sp o(repo->getObject((*it).second.hash));
-        tmp = o->getPayload();
+        const std::string tmp = o->getPayload();
         ASSERT(tmp.length() == (*it).second.length);
 
         status = ::write(fd, tmp.data(), tmp.length());
@@ -259,7 +258,7 @@ LargeBlob::extractFile(const string &path)
 ssize_t
 LargeBlob::read(uint8_t *buf, size_t s, off_t off) const
 {
-    map<uint64_t, LBlobEntry>::const_iterator it;
+    std::map<uint64_t, LBlobEntry>::const_iterator it;
     // XXX: Using upper/lower_bound should be faster
 
     for (it = parts.begin(); it != parts.end(); it++) {

@@ -50,8 +50,6 @@
 #include "oriopt.h"
 #include "server.h"
 
-using namespace std;
-
 // XXX: Hacky remove dependence
 extern mount_ori_config config;
 
@@ -120,7 +118,7 @@ OriFileInfo::storeAttr(AttrMap *attrs) const
 }
 
 OriPriv::OriPriv(const std::string &repoPath,
-                 const string &origin,
+                 const std::string &origin,
                  Repo *remoteRepo)
 {
     repo = new LocalRepo(repoPath);
@@ -232,7 +230,7 @@ OriPriv::init()
 }
 
 int
-cleanupHelper(OriPriv *priv, const string &path)
+cleanupHelper(OriPriv *priv, const std::string &path)
 {
     OriFile_Delete(path);
 
@@ -252,10 +250,10 @@ OriPriv::cleanup()
     UDSServerStop();
 }
 
-pair<string, int>
+std::pair<std::string, int>
 OriPriv::getTemp()
 {
-    string filePath = tmpDir + "/obj.XXXXXX";
+    const std::string filePath = tmpDir + "/obj.XXXXXX";
     char tmpPath[PATH_MAX];
     int fd;
 
@@ -265,7 +263,7 @@ OriPriv::getTemp()
     if (fd < 0)
         throw SystemException(errno);
 
-    return make_pair(tmpPath, fd);
+    return std::make_pair(tmpPath, fd);
 }
 
 /*
@@ -293,13 +291,13 @@ OriPriv::generateId()
 }
 
 OriFileInfo *
-OriPriv::getFileInfo(const string &path)
+OriPriv::getFileInfo(const std::string &path)
 {
     map<string, OriFileInfo*>::iterator it;
 
     // Must call getDir to make sure it is loaded
     if (path != "/") {
-        string parentPath = OriFile_Dirname(path);
+        std::string parentPath = OriFile_Dirname(path);
         if (parentPath == "")
             parentPath = "/";
 
@@ -381,7 +379,7 @@ OriPriv::createInfo()
 }
 
 OriFileInfo *
-OriPriv::addSymlink(const string &path)
+OriPriv::addSymlink(const std::string &path)
 {
     OriFileInfo *info = createInfo();
 
@@ -393,12 +391,12 @@ OriPriv::addSymlink(const string &path)
     return info;
 }
 
-pair<OriFileInfo *, uint64_t>
-OriPriv::addFile(const string &path)
+std::pair<OriFileInfo *, uint64_t>
+OriPriv::addFile(const std::string &path)
 {
     OriFileInfo *info = createInfo();
-    pair<string, int> file = getTemp();
-    uint64_t handle = generateFH();
+    const std::pair<std::string, int> file = getTemp();
+    const uint64_t handle = generateFH();
 
     info->statInfo.st_mode = S_IFREG;
     // XXX: Adjust size properly
@@ -419,11 +417,11 @@ OriPriv::addFile(const string &path)
     info->retain();
     info->retainFd();
 
-    return make_pair(info, handle);
+    return std::make_pair(info, handle);
 }
 
-pair<OriFileInfo *, uint64_t>
-OriPriv::openFile(const string &path, bool writing, bool trunc)
+std::pair<OriFileInfo *, uint64_t>
+OriPriv::openFile(const std::string &path, bool writing, bool trunc)
 {
     OriFileInfo *info = getFileInfo(path);
     uint64_t handle = generateFH();
@@ -437,14 +435,14 @@ OriPriv::openFile(const string &path, bool writing, bool trunc)
     // Handle opening directories
     if (info->isDir()) {
         // For directories just allow opening/closing
-        return make_pair(info, handle);
+        return std::make_pair(info, handle);
     }
 
     // Open temporary file if necessary
     if (info->type == FILETYPE_DIRTY && info->path != "") {
         if (info->fd != -1) {
             // File is already open just return a new handle
-            return make_pair(info, handle);
+            return std::make_pair(info, handle);
         }
         int status = open(info->path.c_str(), O_RDWR);
         if (status < 0) {
@@ -460,7 +458,7 @@ OriPriv::openFile(const string &path, bool writing, bool trunc)
             info->fd = -1;
         } else if (writing && trunc) {
             // Generate temporary file
-            pair<string, int> temp = getTemp();
+            const std::pair<std::string, int> temp = getTemp();
 
             info->statInfo.st_size = 0;
             info->statInfo.st_blocks = 0;
@@ -470,7 +468,7 @@ OriPriv::openFile(const string &path, bool writing, bool trunc)
         } else if (writing) {
             // Copy file
             int status;
-            pair<string, int> temp = getTemp();
+            const std::pair<std::string, int> temp = getTemp();
             close(temp.second);
 
             if (!repo->copyObject(info->hash, temp.first)) {
@@ -495,7 +493,7 @@ OriPriv::openFile(const string &path, bool writing, bool trunc)
         ASSERT(false);
     }
 
-    return make_pair(info, handle);
+    return std::make_pair(info, handle);
 }
 
 size_t
@@ -505,7 +503,7 @@ OriPriv::readFile(OriFileInfo *info, char *buf, size_t size, off_t offset)
 
     ObjectType type = repo->getObjectType(info->hash);
     if (type == ObjectInfo::Blob) {
-        string payload = repo->getPayload(info->hash);
+        const std::string payload = repo->getPayload(info->hash);
         // XXX: Cache
 
         size_t left = payload.size() - offset;
@@ -540,7 +538,7 @@ OriPriv::readFile(OriFileInfo *info, char *buf, size_t size, off_t offset)
 }
 
 void
-OriPriv::unlink(const string &path)
+OriPriv::unlink(const std::string &path)
 {
     OriFileInfo *info = getFileInfo(path);
     string parentPath;
@@ -562,7 +560,7 @@ OriPriv::unlink(const string &path)
 }
 
 void
-OriPriv::rename(const string &fromPath, const string &toPath)
+OriPriv::rename(const std::string &fromPath, const std::string &toPath)
 {
     string fromParent, toParent;
     OriDir *fromDir;
@@ -596,8 +594,8 @@ OriPriv::rename(const string &fromPath, const string &toPath)
     paths.erase(fromPath);
     paths[toPath] = info;
 
-    string from = OriFile_Basename(fromPath);
-    string to = OriFile_Basename(toPath);
+    const std::string from = OriFile_Basename(fromPath);
+    const std::string to = OriFile_Basename(toPath);
 
     fromDir->remove(from);
     toDir->add(to, info->id);
@@ -612,7 +610,7 @@ OriPriv::rename(const string &fromPath, const string &toPath)
 }
 
 OriFileInfo *
-OriPriv::addDir(const string &path)
+OriPriv::addDir(const std::string &path)
 {
     OriFileInfo *info;
     string parentPath;
@@ -662,7 +660,7 @@ OriPriv::addDir(const string &path)
 }
 
 void
-OriPriv::rmDir(const string &path)
+OriPriv::rmDir(const std::string &path)
 {
     OriDir *dir = getDir(path);
     OriFileInfo *info = getFileInfo(path);
@@ -699,7 +697,7 @@ OriPriv::rmDir(const string &path)
 }
 
 OriDir*
-OriPriv::getDir(const string &path)
+OriPriv::getDir(const std::string &path)
 {
     // Check pending directories
     map<string, OriFileInfo*>::iterator it;
@@ -773,7 +771,7 @@ loadDir:
  * Snapshot Operations
  */
 
-map<string, ObjectHash>
+std::map<std::string, ObjectHash>
 OriPriv::listSnapshots()
 {
     return repo->listSnapshots();
@@ -956,8 +954,8 @@ OriPriv::commit(const Commit &cTemplate, bool temporary)
 }
 
 void
-OriPriv::getDiffHelper(const string &path,
-                       map<string, OriFileState::StateType> *diff)
+OriPriv::getDiffHelper(const std::string &path,
+                       std::map<std::string, OriFileState::StateType> *diff)
 {
     OriDir *dir = getDir(path == "" ? "/" : path);
     Tree t;
@@ -1005,10 +1003,10 @@ OriPriv::getDiffHelper(const string &path,
     }
 }
 
-map<string, OriFileState::StateType>
+std::map<std::string, OriFileState::StateType>
 OriPriv::getDiff()
 {
-    map<string, OriFileState::StateType> diff;
+    std::map<std::string, OriFileState::StateType> diff;
 
     getDiffHelper("", &diff);
 
@@ -1016,9 +1014,9 @@ OriPriv::getDiff()
 }
 
 void
-OriPriv::getCheckoutHelper(const string &path,
-                           map<string, OriFileInfo *> *diffInfo,
-                           map<string, OriFileState::StateType> *diffState)
+OriPriv::getCheckoutHelper(const std::string &path,
+                           std::map<std::string, OriFileInfo *> *diffInfo,
+                           std::map<std::string, OriFileState::StateType> *diffState)
 {
     OriDir *dir = getDir(path == "" ? "/" : path);
     Tree t;
@@ -1073,12 +1071,12 @@ OriPriv::getCheckoutHelper(const string &path,
     }
 }
 
-string
+std::string
 OriPriv::checkout(ObjectHash hash, bool force)
 {
     Commit c = repo->getCommit(hash);
-    map<string, OriFileInfo *> diffInfo;
-    map<string, OriFileState::StateType> diffState;
+    std::map<std::string, OriFileInfo *> diffInfo;
+    std::map<std::string, OriFileState::StateType> diffState;
 
     getCheckoutHelper("", &diffInfo, &diffState);
 
@@ -1220,7 +1218,7 @@ OriPriv::checkout(ObjectHash hash, bool force)
     return "";
 }
 
-string
+std::string
 OriPriv::merge(ObjectHash hash)
 {
     ObjectHash p1 = head;
@@ -1249,9 +1247,9 @@ OriPriv::merge(ObjectHash hash)
     Tree::Flat tcFlat = tc.flattened(repo);
 
     // Apply current changes to t1Flat
-    map<string, OriFileInfo *> diffInfo;
-    map<string, OriFileState::StateType> diffState;
-    map<string, OriFileState::StateType>::iterator dsit;
+    std::map<std::string, OriFileInfo *> diffInfo;
+    std::map<std::string, OriFileState::StateType> diffState;
+    std::map<std::string, OriFileState::StateType>::iterator dsit;
 
     getCheckoutHelper("", &diffInfo, &diffState);
 
@@ -1518,7 +1516,7 @@ OriPriv::setJournalMode(OriJournalMode::JournalMode mode)
 }
 
 void
-OriPriv::journal(const string &event, const string &arg)
+OriPriv::journal(const std::string &event, const std::string &arg)
 {
     int len;
     string buf;
@@ -1542,7 +1540,7 @@ OriPriv::journal(const string &event, const string &arg)
  */
 
 void
-OriPrivCheckDir(OriPriv *priv, const string &path, OriDir *dir)
+OriPrivCheckDir(OriPriv *priv, const std::string &path, OriDir *dir)
 {
     OriDir::iterator it;
 
