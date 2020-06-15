@@ -189,14 +189,6 @@ TreeEntry::print() const
  *
  ********************************************************************/
 
-Tree::Tree()
-{
-}
-
-Tree::~Tree()
-{
-}
-
 const string
 Tree::getBlob() const
 {

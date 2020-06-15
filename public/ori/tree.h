@@ -120,8 +120,9 @@ public:
 class Tree
 {
 public:
-    Tree();
-    ~Tree();
+    Tree() = default;
+    ~Tree() = default;
+    
     const std::string getBlob() const;
     void fromBlob(const std::string &blob);
     ObjectHash hash() const; // TODO: cache this
@@ -132,7 +133,8 @@ public:
 
     void print() const;
 
-    typedef std::map<std::string, TreeEntry>::iterator iterator;
+    using iterator = std::map<std::string, TreeEntry>::iterator;
+    
     iterator begin() { return tree.begin(); }
     iterator end() { return tree.end(); }
     iterator find(const std::string &name) { return tree.find(name); }
