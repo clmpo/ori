@@ -45,7 +45,7 @@ cmd_log(int argc, char * const argv[])
         Commit c;
         try {
             c = repository.getCommit(commit);
-        } catch (std::ios_base::failure e) {
+        } catch (const std::ios_base::failure& e) {
             cout << "Error: could not read commit " << commit.hex() << endl;
             break;
         } catch (RuntimeException& e) {

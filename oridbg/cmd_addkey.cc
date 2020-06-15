@@ -62,7 +62,7 @@ cmd_addkey(int argc, char * const argv[])
     PublicKey pub = PublicKey();
     try {
         pub.open(argv[1]);
-    } catch (exception e) {
+    } catch (const std::exception& e) {
 	cout << "It appears that the key is invalid." << endl;
 	return 1;
     }

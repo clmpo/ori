@@ -67,7 +67,7 @@ RemoteRepo::connect(const string &url)
             uc.reset(udsClient);
             r = new UDSRepo(uc.get());
             return (status == 0);
-        } catch (SystemException e) {
+        } catch (const SystemException& e) {
             delete udsClient;
         }
         LocalRepo *lr = new LocalRepo(url);
