@@ -53,9 +53,6 @@ ObjectHash::fromHex("c8877087da56e072870daa843f176e9453115929094c3a40c463a196c29
  * Repo
  */
 
-Repo::Repo() {
-}
-
 Repo::~Repo() {
 }
 

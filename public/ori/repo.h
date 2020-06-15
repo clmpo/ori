@@ -39,7 +39,7 @@ class LargeBlob;
 class Repo
 {
 public:
-    Repo();
+    Repo() = default;
     virtual ~Repo();
 
     // Repo information
