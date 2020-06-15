@@ -21,8 +21,8 @@
 #include <string.h>
 
 struct ObjectHash {
-    static const size_t SIZE = 32;
-    static const size_t STR_SIZE = SIZE * 2;
+    static constexpr const size_t SIZE = 32;
+    static constexpr const size_t STR_SIZE = SIZE * 2;
 
     ObjectHash();
     static ObjectHash fromHex(std::string hex);
