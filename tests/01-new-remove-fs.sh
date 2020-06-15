@@ -1,9 +1,11 @@
 cd $TEMP_DIR
 
 # newfs
+echo "Creating NewFS" $TEST_FS
 $ORI_EXE newfs $TEST_FS
 
 # mount
+echo "Mounting newfs"
 $ORIFS_EXE $TEST_FS $TEST_FS
 
 sleep 1
