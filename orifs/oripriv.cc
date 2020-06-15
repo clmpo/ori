@@ -535,13 +535,12 @@ void
 OriPriv::unlink(const std::string &path)
 {
     OriFileInfo *info = getFileInfo(path);
-    OriDir *parentDir;
 
     std::string parentPath = OriFile_Dirname(path);
     if (parentPath.empty())
         parentPath = "/";
 
-    parentDir = getDir(parentPath);
+    OriDir* parentDir = getDir(parentPath);
 
     ASSERT(info->isSymlink() || info->isReg());
 
@@ -555,8 +554,6 @@ OriPriv::unlink(const std::string &path)
 void
 OriPriv::rename(const std::string &fromPath, const std::string &toPath)
 {
-    OriDir *fromDir;
-    OriDir *toDir;
     OriFileInfo *info = getFileInfo(fromPath);
     OriFileInfo *toFile = nullptr;
 
@@ -567,8 +564,8 @@ OriPriv::rename(const std::string &fromPath, const std::string &toPath)
     if (toParent.empty())
         toParent = "/";
 
-    fromDir = getDir(fromParent);
-    toDir = getDir(toParent);
+    OriDir *fromDir = getDir(fromParent);
+    OriDir *toDir = getDir(toParent);
 
     try {
         toFile = getFileInfo(toPath);
@@ -604,9 +601,6 @@ OriPriv::rename(const std::string &fromPath, const std::string &toPath)
 OriFileInfo *
 OriPriv::addDir(const std::string &path)
 {
-    OriFileInfo *info;
-    OriDir *parentDir;
-    OriFileInfo *parentInfo;
     const time_t now = time(nullptr);
 
     std::string parentPath = OriFile_Dirname(path);
@@ -619,10 +613,10 @@ OriPriv::addDir(const std::string &path)
      * SystemException if the parent doesn't exist so be careful to not 
      * allocate memory before this point.
      */
-    parentDir = getDir(parentPath);
-    parentInfo = getFileInfo(parentPath);
+    OriDir *parentDir = getDir(parentPath);
+    OriFileInfo *parentInfo = getFileInfo(parentPath);
 
-    info = new OriFileInfo();
+    OriFileInfo *info = new OriFileInfo();
 
     info->statInfo.st_uid = geteuid();
     info->statInfo.st_gid = getegid();
@@ -655,15 +649,13 @@ OriPriv::rmDir(const std::string &path)
 {
     OriDir *dir = getDir(path);
     OriFileInfo *info = getFileInfo(path);
-    OriDir *parentDir;
-    OriFileInfo *parentInfo;
 
     std::string parentPath = OriFile_Dirname(path);
-    if (parentPath == "")
+    if (parentPath.empty())
         parentPath = "/";
 
-    parentDir = getDir(parentPath);
-    parentInfo = getFileInfo(parentPath);
+    OriDir *parentDir = getDir(parentPath);
+    OriFileInfo *parentInfo = getFileInfo(parentPath);
 
     /*
      * XXX: We don't handle deleteing files inside the directory so either the 
@@ -712,10 +704,9 @@ loadDir:
     if (!hash.isEmpty()) {
         Tree t = repo->getTree(hash);
         Tree::iterator it;
-        OriFileInfo *dirInfo;
         OriDir *dir = new OriDir();
 
-        dirInfo = getFileInfo(path);
+        OriFileInfo *dirInfo = getFileInfo(path);
 
         for (it = t.begin(); it != t.end(); it++) {
             OriFileInfo *info = new OriFileInfo();
@@ -838,8 +829,7 @@ OriPriv::commitTreeHelper(const std::string &path)
                 e = TreeEntry(hash, ObjectHash());
             } else {
                 if (!info->path.empty()) {
-                    pair<ObjectHash, ObjectHash> hashes;
-                    hashes = repo->addFile(info->path);
+                    std::pair<ObjectHash, ObjectHash> hashes = repo->addFile(info->path);
 
                     // Copy hashes back to info stgructure
                     info->hash = hashes.first;
@@ -1581,13 +1571,11 @@ OriPrivCheckDir(OriPriv *priv, const std::string &path, OriDir *dir)
 void
 OriPriv::fsck()
 {
-    RWKey::sp lock;
+    RWKey::sp lock = nsLock.writeLock();
     map<string, OriFileInfo *>::iterator it;
-    OriDir *dir;
 
-    lock = nsLock.writeLock();
 
-    dir = getDir("/");
+    OriDir *dir = getDir("/");
 
     OriPrivCheckDir(this, "", dir);
 

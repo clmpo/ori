@@ -29,7 +29,6 @@ extern LocalRepo repository;
 int
 cmd_setkey(int argc, char * const argv[])
 {
-    int status;
     const std::string rootPath = LocalRepo::findRootPath();
 
     if (rootPath.empty()) {

@@ -399,8 +399,6 @@ ori_read(const char *path, char *buf, size_t size, off_t offset,
                        strlen(ORI_SNAPSHOT_DIRPATH)) == 0) {
         string snapshot = path;
         size_t pos = 0;
-        Commit c;
-        Tree t;
         
         snapshot = snapshot.substr(strlen(ORI_SNAPSHOT_DIRPATH) + 1);
         pos = snapshot.find('/', pos);
@@ -415,8 +413,8 @@ ori_read(const char *path, char *buf, size_t size, off_t offset,
             parentPath = "/";
 
         // XXX: Enforce that this is a valid snapshot & directory path
-        c = priv->lookupSnapshot(snapshot);
-        t = priv->getTree(c, parentPath);
+        Commit c = priv->lookupSnapshot(snapshot);
+        Tree t = priv->getTree(c, parentPath);
 
         // lookup tree
         Tree::iterator it = t.find(fileName);
@@ -1155,7 +1153,6 @@ int set_opt_helper(void * data, char const * arg, int key, struct fuse_args *out
 int
 main(int argc, char *argv[])
 {
-    int ch;
     bool createReplica = false;
 
     ori_setup_ori_oper();

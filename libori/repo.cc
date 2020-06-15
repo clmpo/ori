@@ -121,12 +121,11 @@ Repo::addSmallFile(const string &path)
 pair<ObjectHash, ObjectHash>
 Repo::addLargeFile(const string &path)
 {
-    string blob;
-    string hash;
+//     std::string hash;
     LargeBlob lb = LargeBlob(this);
 
     lb.chunkFile(path);
-    blob = lb.getBlob();
+    std::string blob = lb.getBlob();
 
     // TODO: this should only be called when committing,
     // we'll take care of backrefs then
