@@ -852,11 +852,7 @@ LocalRepo::dumpPackfile(packid_t id)
 
     printf("Dumping Packfile %d\n", id);
     Packfile::sp packfile = packfiles->getPackfile(id);
-    packfile->readEntries(packfileDumper, NULL);
-}
-
-bool _timeCompare(const Commit &c1, const Commit &c2) {
-    return c1.getTime() < c2.getTime();
+    packfile->readEntries(packfileDumper, nullptr);
 }
 
 std::vector<Commit>
@@ -874,7 +870,8 @@ LocalRepo::listCommits()
         }
     }
 
-    sort(rval.begin(), rval.end(), _timeCompare);
+    std::sort(rval.begin(), rval.end(), 
+              [](const Commit &c1, const Commit &c2) { return c1.getTime() < c2.getTime(); });
     return rval;
 }
 
