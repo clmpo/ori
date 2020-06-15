@@ -935,8 +935,7 @@ OriPriv::getDiffHelper(const std::string &path,
 
     // Load repo directory
     try {
-        ObjectHash treeHash = repo->lookup(headCommit,
-                                           path == "" ? "/" : path);
+        const ObjectHash treeHash = repo->lookup(headCommit, path.empty() ? "/" : path);
         if (treeHash.isEmpty())
             return;
 
