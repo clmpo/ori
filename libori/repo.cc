@@ -250,7 +250,7 @@ Repo::lookup(const Commit &c, const std::string &path)
     if (pv.empty())
         return ObjectHash();
 
-    for (size_t i = 0; i < pv.size(); i++) {
+    for (size_t i = 0; i < pv.size(); ++i) {
         Tree t = getTree(objId);
         const auto e = t.tree.find(pv[i]);
         if (e == t.tree.end()) {
